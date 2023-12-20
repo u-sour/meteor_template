@@ -1,0 +1,14 @@
+[
+    {
+        "username": "",
+        "email": "",
+        "password": "",
+        "profile": {
+            "firstName": "",
+            "lastName": "",
+            "status": "",
+            "profilePic": ""
+        },
+        "roles": "super"
+    }
+]
