@@ -26,11 +26,11 @@ export const userIsInRole = (roles) => {
     return result.length ? true : false
 }
 
-export const throwError = (error) => {
-    console.log('Throw Error', error)
+// export const throwError = (error) => {
+//     console.log('Throw Error', error)
 
-    const newError = error.sanitizedError || error
-    const reason = newError.reason || 'Transaction Error'
+//     const newError = error.sanitizedError || error
+//     const reason = newError.reason || 'Transaction Error'
 
-    throw new Meteor.Error('transaction-error', reason, newError)
-}
+//     throw new Meteor.Error('transaction-error', reason, newError)
+// }

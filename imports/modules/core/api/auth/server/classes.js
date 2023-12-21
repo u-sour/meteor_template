@@ -5,14 +5,16 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 
 // schema
-import { InsertSchema, UpdateSchema } from "./schema";
+import { InsertSchema, UpdateSchema } from "../schema";
 // security
-import { userIsInRole, throwError } from '../../utils/security'
+import { userIsInRole } from '../../../utils/security'
+// responses
+import { throwError } from '../../../utils/responses'
 
 class Admin {
     // Find
     findUsers = new ValidatedMethod({
-        name: 'core.findUsers',
+        name: 'core.admin.findUsers',
         mixins: [CallPromiseMixin],
         validate: new SimpleSchema({
             selector: {
@@ -35,7 +37,7 @@ class Admin {
 
     // Find One
     findOneUser = new ValidatedMethod({
-        name: 'core.findOneUser',
+        name: 'core.admin.findOneUser',
         mixins: [CallPromiseMixin],
         validate: new SimpleSchema({
             _id: String,
@@ -49,7 +51,7 @@ class Admin {
 
     // Find user profile
     findUserProfileImage = new ValidatedMethod({
-        name: 'core.findUserProfileImage',
+        name: 'core.admin.findUserProfileImage',
         mixins: [CallPromiseMixin],
         validate: new SimpleSchema({
             _id: String,
@@ -68,7 +70,7 @@ class Admin {
 
     // Insert
     insertUser = new ValidatedMethod({
-        name: 'core.insertUser',
+        name: 'core.admin.insertUser',
         mixins: [CallPromiseMixin],
         validate: new SimpleSchema({
             user: InsertSchema,
@@ -104,7 +106,7 @@ class Admin {
 
     // Update
     updateUser = new ValidatedMethod({
-        name: 'core.updateUser',
+        name: 'core.admin.updateUser',
         mixins: [CallPromiseMixin],
         validate: new SimpleSchema({
             user: UpdateSchema,
@@ -150,7 +152,7 @@ class Admin {
 
     //Remove
     removeUser = new ValidatedMethod({
-        name: 'core.removeUser',
+        name: 'core.admin.removeUser',
         mixins: [CallPromiseMixin],
         validate: new SimpleSchema({
             _id: { type: String },
@@ -170,12 +172,10 @@ class Admin {
     })
 }
 
-class User {
+export default new Admin();
 
-}
-
-class Authencation {
-    admin = new Admin();
-}
-
-export default new Authencation();
+// class Authencation {
+//     admin = new Admin();
+// }
+// const auth = new Authencation()
+// export default auth;

@@ -8,6 +8,7 @@ const routes = [
                 path: '/core/auth',
                 name: 'core.auth',
                 component: () => import('./pages/Authentication.vue'),
+                meta: { requiresGuest: true },
                 redirect: { name: 'core.auth.signIn' },
                 children: [
                     {
@@ -23,10 +24,23 @@ const routes = [
                 ]
             },
             {
+                path: '/core/auth/admin',
+                name: 'core.auth.admin',
+                component: () => import('./layouts/AdminLayout.vue'),
+                meta: { requiresAuth: true },
+                redirect: { name: 'core.auth.admin.dashboard' },
+                children: [
+                    {
+                        path: '/core/auth/admin/dashboard',
+                        name: 'core.auth.admin.dashboard',
+                        component: () => import('./pages/admin/Dashboard.vue'),
+                    }
+                ]
+            },
+            {
                 path: '/core/:pathMatch(.*)*',
                 name: 'core.routeChecker',
                 component: () => import('./pages/NotFound.vue'),
-                meta: { notRequiresAuth: true }
             }
         ]
     }
