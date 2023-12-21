@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { reset } from '@formkit/core'
-import Authencation from '../../../api/auth/classes'
+import auth from '../../../api/auth/class'
 import { SignUpFrom } from '../../../types/authentication';
 import notify from '../../../utils/notify'
 
@@ -59,7 +59,7 @@ const signUp = (form: SignUpFrom) => {
     form.status = 'inactive';
     form.roles = ['guest'];
     submitted.value = true;
-    Authencation.admin.insertUser.call({ user: form }, (err, res) => {
+    auth.admin.insertUser.call({ user: form }, (err, res) => {
         if (err) {
             submitted.value = false;
             return notify.error(err.message);

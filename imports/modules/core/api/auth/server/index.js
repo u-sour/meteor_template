@@ -1,2 +1,2 @@
 import './publication'
-import '../classes'
+import './classes'

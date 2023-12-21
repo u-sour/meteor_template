@@ -8,3 +8,19 @@ export interface SignUpFrom {
     status: string
     roles: string[]
 }
+export interface SignInForm {
+    username: string,
+    password: string
+}
+
+export interface User {
+    username: string,
+    emails: [],
+    profile: UserProfile
+}
+interface UserProfile {
+    firstName: string,
+    lastName: string,
+    profilePic: string,
+    status: string
+}

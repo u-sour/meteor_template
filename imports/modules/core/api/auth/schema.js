@@ -3,13 +3,15 @@ import SimpleSchema from "simpl-schema";
 export const InsertSchema = new SimpleSchema({
     firstName: {
         type: String,
+        min: 4,
     },
     lastName: {
         type: String,
+        min: 4,
     },
     username: {
         type: String,
-        min: 5,
+        min: 4,
         max: 20,
     },
     email: {
@@ -25,6 +27,7 @@ export const InsertSchema = new SimpleSchema({
     },
     status: {
         type: String,
+        allowedValues: ["active", "inactive"],
     },
     roles: {
         type: Array,
@@ -44,13 +47,15 @@ export const UpdateSchema = new SimpleSchema({
     },
     firstName: {
         type: String,
+        min: 4,
     },
     lastName: {
         type: String,
+        min: 4,
     },
     username: {
         type: String,
-        min: 5,
+        min: 4,
         max: 20,
     },
     email: {
@@ -66,6 +71,7 @@ export const UpdateSchema = new SimpleSchema({
     },
     status: {
         type: String,
+        allowedValues: ["active", "inactive"],
     },
     roles: {
         type: Array,
