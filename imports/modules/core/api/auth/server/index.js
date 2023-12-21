@@ -1,2 +1,2 @@
 import './publication'
-import '../methods'
+import '../classes'
