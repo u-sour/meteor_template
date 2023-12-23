@@ -1,23 +1,27 @@
 <template>
-    <h1 class="fw-bolder">👋 Hello, Welcome back!</h1>
-    <h6 class="text-secondary">Sign in with your data that you entered during your registration.</h6>
+    <h1 class="fw-bolder">{{ $t("core.pages.auth.signIn.title") }}</h1>
+    <h6 class="text-secondary">{{ $t("core.pages.auth.signIn.subTitle") }}</h6>
     <div class="mt-5">
         <FormKit type="form" id="signInForm" @submit="signIn" :actions="false" :disabled="submitted">
-            <FormKit name="username" label="Username" :wrapper-class="{ 'formkit-wrapper': false }"
-                :validation="validations.username" />
-            <FormKit type="password" name="password" label="Password" prefix-icon="password" suffix-icon="eyeClosed"
-                suffix-icon-class="hover:text-blue-500" :wrapper-class="{ 'formkit-wrapper': false }"
-                :validation="validations.password" @suffix-icon-click="toggleShowPassword" />
+            <FormKit name="username" :label="$t('core.pages.auth.signIn.form.username')"
+                :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.username" />
+            <FormKit type="password" name="password" :label="$t('core.pages.auth.signIn.form.password')"
+                prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
+                :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.password"
+                @suffix-icon-click="toggleShowPassword" />
             <div class="d-flex justify-content-between ">
-                <FormKit type="checkbox" label="Remember Me" name="rememberMe" />
-                <router-link :to="{ name: '' }">Forgot Password</router-link>
+                <FormKit type="checkbox" :label="$t('core.pages.auth.signIn.form.rememberMe')" name="rememberMe" />
+                <router-link :to="{ name: '' }">{{ $t('core.pages.auth.signIn.components.forgotPassword') }}</router-link>
             </div>
             <div class="d-grid gap-2">
-                <button class="btn btn-primary fw-bold" type="submit" :disabled="submitted">SIGN IN</button>
+                <button class="btn btn-primary fw-bold" type="submit" :disabled="submitted">{{
+                    $t('core.btns.auth.signIn').toUpperCase()
+                }}</button>
             </div>
             <div class="text-center mt-3">
-                <span>Don't have an account? <span><router-link :to="{ name: 'core.auth.signUp' }">Sign Up
-                            Now</router-link></span></span>
+                <span>{{ $t('core.pages.auth.signIn.components.noAccount') }} <span><router-link
+                            :to="{ name: 'core.auth.signUp' }">{{ $t('core.btns.auth.signUp')
+                            }}</router-link></span></span>
             </div>
         </FormKit>
     </div>
@@ -46,7 +50,6 @@ const toggleShowPassword = (node: any, e: any) => {
 const signIn = async (form: SignInForm) => {
     submitted.value = true
     auth.user.signIn(form).then((res) => {
-        console.log("🚀 ~ file: SignInForm.vue:47 ~ auth.user.signIn ~ res:", res)
         authStore.setUser(res.data.userId)
         submitted.value = false;
         reset('signInForm');

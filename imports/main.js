@@ -2,8 +2,10 @@ import { Meteor } from 'meteor/meteor'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { VueMeteor } from 'vue-meteor-tracker'
-import config from './modules/core/utils/config/formkit.config'
+import i18nConfig from './modules/core/utils/config/i18n.config'
+import fkConfig from './modules/core/utils/config/formkit.config'
 import { plugin, defaultConfig } from '@formkit/vue'
+import '/imports/styles/main.css'
 import '@formkit/themes/genesis'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap'
@@ -17,7 +19,8 @@ Meteor.startup(() => {
   app.use(pinia)
   app.use(router)
   app.use(VueMeteor)
-  app.use(plugin, defaultConfig(config))
+  app.use(i18nConfig)
+  app.use(plugin, defaultConfig(fkConfig))
   app.mount('#app')
 
   router.beforeResolve((to, from, next) => {

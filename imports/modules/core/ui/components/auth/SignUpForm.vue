@@ -1,36 +1,38 @@
 <template>
     <div>
-        <h1 class="fw-bolder">Join us today!</h1>
-        <h6 class="text-secondary">Sign up now to become a member.</h6>
+        <h1 class="fw-bolder">{{ $t('core.pages.auth.signUp.title') }}</h1>
+        <h6 class="text-secondary">{{ $t('core.pages.auth.signUp.subTitle') }}</h6>
         <div class="mt-5">
             <FormKit type="form" id="signUpForm" @submit="signUp" :actions="false" :disabled="submitted">
                 <div class="row">
                     <div class="col-6">
-                        <FormKit name="firstName" label="Firstname" :wrapper-class="{ 'formkit-wrapper': false }"
-                            :validation="validations.userInfo" />
+                        <FormKit name="firstName" :label="$t('core.pages.auth.signUp.form.firstName')"
+                            :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
                     </div>
                     <div class="col-6">
-                        <FormKit name="lastName" label="Lastname" :wrapper-class="{ 'formkit-wrapper': false }"
-                            :validation="validations.userInfo" />
+                        <FormKit name="lastName" :label="$t('core.pages.auth.signUp.form.lastName')"
+                            :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
                     </div>
                 </div>
-                <FormKit name="username" label="Username" :wrapper-class="{ 'formkit-wrapper': false }"
-                    :validation="validations.userInfo" />
-                <FormKit name="email" label="Email address" :wrapper-class="{ 'formkit-wrapper': false }"
-                    :validation="validations.email" />
-                <FormKit type="password" name="password" label="Password" prefix-icon="password" suffix-icon="eyeClosed"
-                    suffix-icon-class="hover:text-blue-500" :wrapper-class="{ 'formkit-wrapper': false }"
-                    :validation="validations.password" @suffix-icon-click="toggleShowPassword" />
-                <FormKit type="password" name="confirmPassword" label="Confirm Password" prefix-icon="password"
-                    suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
+                <FormKit name="username" :label="$t('core.pages.auth.signUp.form.lastName')"
+                    :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
+                <FormKit name="email" :label="$t('core.pages.auth.signUp.form.email')"
+                    :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.email" />
+                <FormKit type="password" name="password" :label="$t('core.pages.auth.signUp.form.password')"
+                    prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
+                    :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.password"
+                    @suffix-icon-click="toggleShowPassword" />
+                <FormKit type="password" name="confirmPassword" :label="$t('core.pages.auth.signUp.form.confirmPassword')"
+                    prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
                     :wrapper-class="{ 'formkit-wrapper': false }" :validation="`${validations.password}|confirm:password`"
                     @suffix-icon-click="toggleShowPassword" />
                 <div class="d-grid gap-2">
-                    <button class="btn btn-primary fw-bold" type="submit" :disabled="submitted">SIGN UP</button>
+                    <button class="btn btn-primary fw-bold" type="submit" :disabled="submitted">{{
+                        $t('core.btns.auth.signUp') }}</button>
                 </div>
                 <div class="text-center mt-3">
-                    <span>Already have an account? <span><router-link :to="{ name: 'core.auth.signIn', replace: true }">Sign
-                                In
+                    <span>{{ $t('core.pages.auth.signUp.components.haveAccount') }} <span><router-link
+                                :to="{ name: 'core.auth.signIn', replace: true }">{{ $t('core.btns.auth.signIn') }}
                             </router-link></span></span>
                 </div>
             </FormKit>

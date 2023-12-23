@@ -24,6 +24,7 @@
     "printd": "^1.6.0",
     "simpl-schema": "^3.4.1",
     "vue": "^3.3.9",
+    "vue-i18n": "^9.8.0",
     "vue-meteor-tracker": "^3.0.0-beta.7",
     "vue-router": "^4.2.5",
     "vue3-toastify": "^0.1.14"
