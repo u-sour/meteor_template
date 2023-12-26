@@ -1,11 +1,9 @@
 <template>
-    <div class="wrapper">
-        <img :src="flag.path" class="img border border-3 rounded-circle" @click="toggleI18n" :alt="flag.locale">
-    </div>
+    <img :src="flag.path" class="img border-2 rounded-circle" @click="toggleI18n" :alt="flag.locale">
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { Flag } from '../../types/i18n';
 import { useI18n } from 'vue-i18n';
 
@@ -46,17 +44,9 @@ const toggleI18n = () => {
 </script>
 
 <style scoped>
-.wrapper {
-    margin-top: .5rem;
-    margin-right: .5rem;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-}
-
 .img {
-    height: 50px;
-    width: 50px;
+    height: 2rem;
+    width: 2rem;
     object-fit: cover;
     object-position: center;
     transition: transform 0.3s ease-in-out;

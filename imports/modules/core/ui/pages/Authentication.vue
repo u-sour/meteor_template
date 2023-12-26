@@ -1,6 +1,10 @@
 <template>
     <div class="container-fluid">
-        <ToggleI18n :model-value="currentLocale" />
+        <div class="wrapper d-flex align-items-center">
+            <I18nBtn :model-value="currentLocale" />
+            <div class="vr mx-2 text-bg-light"></div>
+            <ThemeBtn />
+        </div>
         <div class="row">
             <div class="vh-100 col-sm-12 col-md-12 col-lg-6  d-flex justify-content-center align-items-center">
                 <div class="col px-lg-5">
@@ -8,7 +12,7 @@
                 </div>
             </div>
             <div class="vh-100 col-lg-6 d-none d-lg-flex justify-content-center align-items-center bg-primary">
-                <h1 class="text-light">{{ companyName }}</h1>
+                <h1 class=" text-body-emphasis">{{ companyName }}</h1>
             </div>
         </div>
     </div>
@@ -17,7 +21,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import ToggleI18n from '../components/ToggleI18n.vue';
+import I18nBtn from '../components/I18nBtn.vue';
+import ThemeBtn from '../components/ThemeBtn.vue';
 
 const { locale } = useI18n()
 const companyName = "YOUR COMPANY NAME";
@@ -31,4 +36,12 @@ watch(currentLocale, (lang) => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.wrapper {
+    margin-top: .5rem;
+    margin-right: .5rem;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+</style>

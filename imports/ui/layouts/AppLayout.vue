@@ -3,12 +3,10 @@ import AppMenu from './AppMenu.vue'
 </script>
 
 <template>
-  <div class="">
-    <AppMenu />
-    <main>
-      <router-view />
-    </main>
-  </div>
+  <AppMenu />
+  <main>
+    <router-view />
+  </main>
 </template>
 
 <style scoped>

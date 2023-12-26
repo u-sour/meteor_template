@@ -1,14 +1,15 @@
 import { Meteor } from 'meteor/meteor'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import VueProgressBar from '@aacassandra/vue3-progressbar'
 import { VueMeteor } from 'vue-meteor-tracker'
+import vue3ProgressbarConfig from './modules/core/utils/config/vue3-progressbar.config'
 import i18nConfig from './modules/core/utils/config/i18n.config'
 import fkConfig from './modules/core/utils/config/formkit.config'
 import { plugin, defaultConfig } from '@formkit/vue'
-import '/imports/styles/main.css'
-import '@formkit/themes/genesis'
-import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap'
+import '/imports/styles/main.scss'
+import '@formkit/themes/genesis'
 import 'vue3-toastify/dist/index.css';
 import App from './App.vue'
 import { router } from './router'
@@ -20,10 +21,17 @@ Meteor.startup(() => {
   app.use(router)
   app.use(VueMeteor)
   app.use(i18nConfig)
+  app.use(VueProgressBar, vue3ProgressbarConfig)
   app.use(plugin, defaultConfig(fkConfig))
   app.mount('#app')
 
-  router.beforeResolve((to, from, next) => {
+  const progress = app.config.globalProperties.$Progress
+
+  /**
+   * Navigation Router Guards
+   **/
+  router.beforeEach((to, from, next) => {
+    progress.start()
     if (to.meta.requiresAuth && !Meteor.userId()) {
       // (not allow user enter to route user page without login)
       // if route user want to enter require auth & user doesn't login it will redirect to login page
@@ -35,5 +43,9 @@ Meteor.startup(() => {
     } else {
       return next()
     }
+  })
+  //  hook the progress bar to finish after we've finished moving router-view
+  router.afterEach(() => {
+    progress.finish()
   })
 })
