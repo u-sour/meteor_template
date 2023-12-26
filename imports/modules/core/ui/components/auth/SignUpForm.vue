@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 class="fw-bolder">{{ $t('core.pages.auth.signUp.title') }}</h1>
-        <h6 class="text-secondary">{{ $t('core.pages.auth.signUp.subTitle') }}</h6>
+        <h6>{{ $t('core.pages.auth.signUp.subTitle') }}</h6>
         <div class="mt-5">
             <FormKit type="form" id="signUpForm" @submit="signUp" :actions="false" :disabled="submitted">
                 <div class="row">
@@ -28,11 +28,12 @@
                     @suffix-icon-click="toggleShowPassword" />
                 <div class="d-grid gap-2">
                     <button class="btn btn-primary fw-bold" type="submit" :disabled="submitted">{{
-                        $t('core.btns.auth.signUp') }}</button>
+                        $t('core.btns.auth.signUp').toUpperCase() }}</button>
                 </div>
                 <div class="text-center mt-3">
                     <span>{{ $t('core.pages.auth.signUp.components.haveAccount') }} <span><router-link
-                                :to="{ name: 'core.auth.signIn', replace: true }">{{ $t('core.btns.auth.signIn') }}
+                                :to="{ name: 'core.auth.signIn', replace: true }">{{
+                                    $t('core.btns.auth.signIn') }}
                             </router-link></span></span>
                 </div>
             </FormKit>

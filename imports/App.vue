@@ -1,4 +1,7 @@
 <template>
+    <!-- Set progressbar -->
+    <vue-progress-bar />
+    <!-- Dynamic layout -->
     <router-view />
 </template>
 

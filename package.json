@@ -9,12 +9,19 @@
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "dependencies": {
+    "@aacassandra/vue3-progressbar": "^1.0.3",
     "@babel/runtime": "^7.23.5",
+    "@cloudinary/url-gen": "^1.14.0",
+    "@cloudinary/vue": "^1.11.2",
     "@formkit/auto-animate": "^0.8.1",
     "@formkit/icons": "^1.4.0",
     "@formkit/themes": "^1.4.0",
     "@formkit/vue": "^1.4.0",
+    "@vueuse/core": "^10.7.0",
+    "@vueuse/head": "^2.0.0",
+    "animate.css": "^4.1.1",
     "bootstrap": "^5.3.2",
+    "compressorjs": "^1.2.1",
     "lodash": "^4.17.21",
     "meteor-node-stubs": "^1.2.7",
     "moment": "^2.29.4",
@@ -27,6 +34,7 @@
     "vue-i18n": "^9.8.0",
     "vue-meteor-tracker": "^3.0.0-beta.7",
     "vue-router": "^4.2.5",
+    "vue3-easy-data-table": "^1.5.47",
     "vue3-toastify": "^0.1.14"
   },
   "meteor": {
@@ -42,6 +50,7 @@
     "autoprefixer": "^10.4.16",
     "meteor-vite": "^1.7.1",
     "postcss": "^8.4.31",
+    "sass": "^1.69.5",
     "tailwindcss": "^3.3.5",
     "vite": "^3.2.7"
   }

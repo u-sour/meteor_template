@@ -10,7 +10,13 @@ export interface SignUpFrom {
 }
 export interface SignInForm {
     username: string,
-    password: string
+    password: string,
+    rememberMe?: boolean
+}
+
+export interface RememberMe {
+    username?: string,
+    rememberMe?: boolean
 }
 
 export interface User {
