@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { defineStore } from "pinia"
 import { ref, computed } from 'vue';
 import auth from '../../api/auth/class'

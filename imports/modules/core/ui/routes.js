@@ -34,6 +34,13 @@ const routes = [
                         path: '/core/auth/admin/dashboard',
                         name: 'core.auth.admin.dashboard',
                         component: () => import('./pages/admin/Dashboard.vue'),
+                        meta: { title: 'Dashboard', iconName: 'SolarSiderbarLinear' }
+                    },
+                    {
+                        path: '/core/auth/admin/users',
+                        name: 'core.auth.admin.users',
+                        component: () => import('./pages/admin/Users.vue'),
+                        meta: { title: 'Users', iconName: 'SolarSmileCircleLinear' }
                     }
                 ]
             },
