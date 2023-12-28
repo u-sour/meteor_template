@@ -17,6 +17,7 @@
     "@formkit/icons": "^1.4.0",
     "@formkit/themes": "^1.4.0",
     "@formkit/vue": "^1.4.0",
+    "@popperjs/core": "^2.11.8",
     "@vueuse/core": "^10.7.0",
     "@vueuse/head": "^2.0.0",
     "animate.css": "^4.1.1",

@@ -8,8 +8,8 @@
 
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core'
-import SunAnimationIcon from './icons/SunAnimationIcon'
-import MoonAnimationIcon from './icons/MoonAnimationIcon'
+import SunAnimationIcon from './icons/SunAnimationIcon.vue'
+import MoonAnimationIcon from './icons/MoonAnimationIcon.vue'
 const isDark = useDark({
     selector: 'html',
     attribute: 'data-bs-theme',

@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar" :style="{ width: sidebarWidth }">
         <!--------------header----------------->
-        <h3>
+        <h3 class="text-center">
             <span v-if="isCollapsed">
                 <div>M</div>
                 <div>T</div>
@@ -12,9 +12,9 @@
         <SidebarLink v-for="route in adminRoutes" :key="route.name" :to-route-name="route.name"
             :icon-name="route.meta.iconName">{{ route.meta.title }}</SidebarLink>
         <!-----------action-buttons------------>
-        <div class="wrapper-collapse-icon w-100" @click="toggleSidebar">
+        <div class="wrapper-collapse-icon" @click="toggleSidebar">
             <span class="collapse-icon" :class="{ 'rotate-180': isCollapsed }" >
-                <Icon name="SolarDoubleAltArrowLeftOutline" />
+                <IconSvg name="SolarDoubleAltArrowLeftOutline" />
             </span>
         </div>
     </div>
@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import { toRefs } from 'vue';
 import { useSidebarStore } from '../../stores/layouts/sidebar'
-import SidebarLink from '../components/sidebarlink.vue';
-import Icon from './Icon.vue';
+import SidebarLink from '../components/SidebarLink.vue';
+import IconSvg from './IconSvg.vue';
 import routes from '../routes'
 
 const sidebarStore = useSidebarStore();
@@ -43,20 +43,21 @@ const { isCollapsed, sidebarWidth, toggleSidebar } = toRefs(sidebarStore);
     top: 0;
     left: 0;
     bottom: 0;
-    padding: 0.5em;
     transition: 0.3s ease;
     display: flex;
     flex-direction: column;
 }
 .sidebar h1 {
-  height: 2.5em;
+    height: 2.5em;
 }
 .wrapper-collapse-icon{
     position: absolute;
     bottom: 0;
+    width: 100%;
 }
 .collapse-icon {
-
+    display: flex;
+    justify-content: center;
     color: #fff;
     transition: 0.2s linear;
 }
