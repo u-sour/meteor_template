@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="p-2">
         <h1>Dashboard</h1>
         user: {{ authStore.user }}
         <button class="btn btn-primary" @click="signOut">Sign Out</button>
