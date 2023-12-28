@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { toRefs } from 'vue';
 import { useSidebarStore } from '../../stores/layouts/sidebar';
-import SideBar from '../components/SideBar.vue';
+import SideBar from '../components/Sidebar.vue';
 
 
 const sidebarStore = useSidebarStore()

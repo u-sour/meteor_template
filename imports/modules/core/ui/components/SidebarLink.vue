@@ -1,18 +1,20 @@
 <template>
+  <div class="px-2">
     <RouterLink :to="{ name: toRouteName }" class="link" :class="{ active: isActive }">
-        <Icon class="icon" :name="iconName" />
-        <Transition name="fade">
-            <span v-if="!isCollapsed">
-                <slot></slot>
-            </span>
-        </Transition>
+      <IconSvg class="icon" :name="iconName" />
+      <Transition name="fade">
+        <span v-if="!isCollapsed">
+          <slot></slot>
+        </span>
+      </Transition>
     </RouterLink>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed, toRefs } from 'vue';
 import { useRoute } from 'vue-router'
-import Icon from './Icon.vue';
+import IconSvg from './IconSvg.vue';
 import { useSidebarStore } from '../../stores/layouts/sidebar';
 const props = defineProps({
     toRouteName: { type: String, required: true },
@@ -39,15 +41,15 @@ const isActive = computed(() => route.name === props.toRouteName)
 
 .link {
   display: flex;
+  justify-items: center;
   align-items: center;
-
   cursor: pointer;
   position: relative;
   font-weight: 400;
   user-select: none;
 
-  margin: 0.1em 0;
-  padding: 0.4em;
+  margin: 0.2em 0;
+  padding: 1em 0;
   border-radius: 0.25em;
   height: 1.5em;
 
