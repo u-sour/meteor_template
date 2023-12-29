@@ -1,25 +1,16 @@
 <template>
-    <div class="p-2">
+    <div class="">
         <h1>Dashboard</h1>
         user: {{ authStore.user }}
-        <button class="btn btn-primary" @click="signOut">Sign Out</button>
+        <ThemeBtn/>
     </div>
 </template>
 
 <script setup lang="ts">
-import { Meteor } from 'meteor/meteor';
 import { useAuthStore } from '../../../stores/auth';
-import { useRouter } from 'vue-router';
+import ThemeBtn from '../../components/ThemeBtn.vue';
 
-const router = useRouter()
-const authStore = useAuthStore()
-
-const signOut = () => {
-    Meteor.logout((error) => {
-        if (error) console.log(error);
-        router.replace({ name: 'core.auth.signIn' });
-    });
-}
+const authStore = useAuthStore();
 </script>
 
 <style scoped></style>

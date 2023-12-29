@@ -41,6 +41,12 @@ const routes = [
                         name: 'core.auth.admin.users',
                         component: () => import('./pages/admin/Users.vue'),
                         meta: { title: 'Users', iconName: 'SolarSmileCircleLinear' }
+                    },
+                    {
+                        path: '/core/auth/admin/settings',
+                        name: 'core.auth.admin.settings',
+                        component: () => import('./pages/admin/Settings.vue'),
+                        meta: { title: 'Settings', iconName: 'SolarSettingsLinear' }
                     }
                 ]
             },
