@@ -1,10 +1,9 @@
 <template>
-    <li class="nav-item mb-1">
-        <a href="#" @click="signOut">
-            <IconSvg name="SolarLogout3Linear" />
-            <span class="ms-2">Sign Out</span>
-        </a>
-    </li>
+    <div>
+        <button class="btn btn-outline-light d-inline-flex justify-content-center  align-items-center" @click="signOut">
+            <IconSvg class="icon me-2" name="SolarLogout3Linear" /> Sign Out
+        </button>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -22,4 +21,8 @@ const signOut = () => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.icon {
+    width: 25px;
+}
+</style>

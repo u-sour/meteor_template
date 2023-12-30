@@ -1,6 +1,6 @@
 <template>
-    <div class="p-2">
-        <h1>User</h1>
+    <div>
+        <h1>Edit User</h1>
     </div>
 </template>
 
@@ -8,6 +8,4 @@
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

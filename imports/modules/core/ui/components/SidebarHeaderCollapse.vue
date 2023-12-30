@@ -3,14 +3,14 @@
         <a href="#" class="text-white" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar">
             <IconSvg name="SolarHamburgerMenuLinear" />
         </a>
-        <span class="ms-3">{{brand}}</span>
+        <span class="ms-3">{{ brand.toUpperCase() }}</span>
     </div>
 </template>
 
 <script setup lang="ts">
 import IconSvg from './IconSvg.vue';
 defineProps({
-    brand: {type:String,required:true}
+    brand: { type: String, default: 'meteor template' }
 })
 </script>
 

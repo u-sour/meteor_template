@@ -18,7 +18,7 @@ const props = defineProps({
 });
 
 const route = useRoute();
-const isActive = computed(() => route.name === props.toRouteName);
+const isActive = computed(() => route.meta.breadcrumb.parent.route === props.toRouteName);
 </script>
 
 <style scoped></style>

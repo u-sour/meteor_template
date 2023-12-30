@@ -1,8 +1,9 @@
 <template>
     <input type="checkbox" class="btn-check" id="theme" autocomplete="off">
-    <label class="btn btn-outline-light" for="theme" @click="toggleDark()">
-        <SunAnimationIcon v-if="!isDark" />
-        <MoonAnimationIcon v-else />
+    <label class="btn btn-outline-light d-inline-flex align-items-center" for="theme" @click="toggleDark()">
+        <SunAnimationIcon class="icon" v-if="!isDark" />
+        <MoonAnimationIcon class="icon" v-else />
+        <span class="ms-2" v-if="isShowLabel">{{ !isDark ? 'Light' : 'Dark' }}</span>
     </label>
 </template>
 
@@ -10,6 +11,9 @@
 import { useDark, useToggle } from '@vueuse/core'
 import SunAnimationIcon from './icons/SunAnimationIcon.vue'
 import MoonAnimationIcon from './icons/MoonAnimationIcon.vue'
+defineProps({
+    isShowLabel: { type: Boolean, default: false }
+})
 const isDark = useDark({
     selector: 'html',
     attribute: 'data-bs-theme',
@@ -19,4 +23,8 @@ const isDark = useDark({
 const toggleDark = useToggle(isDark)
 </script>
 
-<style scoped></style>
+<style scoped>
+.icon {
+    width: 25px;
+}
+</style>
