@@ -1,8 +1,6 @@
 <template>
-    <div class="">
-        <h1>Dashboard</h1>
+    <div>
         user: {{ authStore.user }}
-        <ThemeBtn/>
     </div>
 </template>
 
