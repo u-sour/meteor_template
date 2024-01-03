@@ -6,11 +6,11 @@
             <div class="p-4">
                 <Breadcrumb />
                 <PageHeader />
-                <div class="row">
-                    <div class="col">
-                        <RouterView />
-                    </div>
-                </div>
+                <!-- <div class="row"> -->
+                <!-- <div class="col"> -->
+                <RouterView />
+                <!-- </div> -->
+                <!-- </div> -->
             </div>
 
         </div>

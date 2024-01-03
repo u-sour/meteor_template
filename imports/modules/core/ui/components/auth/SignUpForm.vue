@@ -14,7 +14,7 @@
                             :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
                     </div>
                 </div>
-                <FormKit name="username" :label="$t('core.pages.auth.signUp.form.lastName')"
+                <FormKit name="username" :label="$t('core.pages.auth.signUp.form.username')"
                     :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
                 <FormKit name="email" :label="$t('core.pages.auth.signUp.form.email')"
                     :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.email" />

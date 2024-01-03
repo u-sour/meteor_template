@@ -17,6 +17,9 @@ export const InsertSchema = new SimpleSchema({
     email: {
         type: String,
     },
+    phoneNumber: {
+        type: String,
+    },
     password: {
         type: String,
         min: 6,
@@ -35,7 +38,7 @@ export const InsertSchema = new SimpleSchema({
     'roles.$': {
         type: String,
     },
-    profilePic: {
+    profileImage: {
         type: String,
         optional: true,
     },
@@ -61,6 +64,9 @@ export const UpdateSchema = new SimpleSchema({
     email: {
         type: String,
     },
+    phoneNumber: {
+        type: String,
+    },
     password: {
         type: String,
         min: 6,
@@ -79,8 +85,82 @@ export const UpdateSchema = new SimpleSchema({
     'roles.$': {
         type: String,
     },
-    profilePic: {
+    profileImage: {
         type: String,
         optional: true,
     },
 })
+
+
+const ProfileImageSchema = new SimpleSchema({
+    publicId: {
+        type: String
+    },
+    name: {
+        type: String
+    },
+    base64: {
+        type: String
+    },
+    url: {
+        type: String
+    },
+})
+
+export const UpdateProfileSchema = new SimpleSchema({
+    _id: {
+        type: String,
+    },
+    firstName: {
+        type: String,
+        min: 4,
+    },
+    lastName: {
+        type: String,
+        min: 4,
+    },
+    username: {
+        type: String,
+        min: 4,
+        max: 20,
+    },
+    about: {
+        type: String,
+        max: 120,
+        optional: true
+    },
+    company: {
+        type: String,
+        optional: true
+    },
+    job: {
+        type: String,
+        optional: true
+    },
+    address: {
+        type: String,
+        optional: true
+    },
+    phoneNumber: {
+        type: String,
+        optional: true
+    },
+    email: {
+        type: String,
+    },
+    status: {
+        type: String,
+        allowedValues: ["active", "inactive"],
+    },
+    // profileImageFile: {
+    //     type: Object,
+    //     optional: true,
+    //     blackbox: true
+    // },
+    // profileImage: {
+    //     type: ProfileImageSchema,
+    //     optional: true,
+    //     blackbox: true
+    // },
+})
+

@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <button class="btn btn-outline-light d-inline-flex justify-content-center  align-items-center" @click="signOut">
-            <IconSvg class="icon me-2" name="SolarLogout3Linear" /> Sign Out
-        </button>
-    </div>
+    <button class="btn btn-outline-light d-inline-flex justify-content-center  align-items-center" @click="signOut">
+        <IconSvg class="icon me-2" name="SolarLogout3Linear" /> {{ $t('core.btns.auth.signOut') }}
+    </button>
 </template>
 
 <script setup lang="ts">

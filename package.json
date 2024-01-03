@@ -2,7 +2,7 @@
   "name": "meteor_template",
   "private": true,
   "scripts": {
-    "start": "meteor run",
+    "start": "meteor --settings ./private/cloudinary-settings.json",
     "build": "meteor build ../output/vue --directory",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
@@ -11,8 +11,6 @@
   "dependencies": {
     "@aacassandra/vue3-progressbar": "^1.0.3",
     "@babel/runtime": "^7.23.5",
-    "@cloudinary/url-gen": "^1.14.0",
-    "@cloudinary/vue": "^1.11.2",
     "@formkit/auto-animate": "^0.8.1",
     "@formkit/icons": "^1.4.0",
     "@formkit/themes": "^1.4.0",

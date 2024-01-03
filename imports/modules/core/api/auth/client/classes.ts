@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
-import { SignInForm } from "../../../types/authentication";
+import { Accounts } from 'meteor/accounts-base'
+import { SignInForm,changePasswordForm } from "../../../types/authentication";
 import authLocalStorage from "../../../storage/auth";
 import { throwSuccess } from '../../../utils/responses'
 import { ThrowSuccess } from "../../../types/responses";
@@ -18,7 +19,18 @@ class User {
         });
     }
 
-
+    changePassword = (form: changePasswordForm) => {
+        return new Promise<ThrowSuccess>((resolve, reject) => {
+            const { currentPassword, newPassword } = form;
+            Accounts.changePassword(currentPassword, newPassword, (error) => {
+                if (error) {
+                    reject(new Meteor.Error(403,'Incorrect current password'));
+                }
+        
+                resolve(throwSuccess.passwordChanged());
+            });
+        });
+    }
 }
 
 export default new User(); 

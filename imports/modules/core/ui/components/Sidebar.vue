@@ -6,7 +6,7 @@
         <hr>
         <ul class="custom-nav nav nav-pills flex-column mb-auto">
             <SidebarLink v-for="route in adminRoutes" :key="route.name" :to-route-name="route.name"
-                :icon-name="route.meta.iconName"><span class="ms-2">{{ route.meta.title }}</span></SidebarLink>
+                :icon-name="route.meta.iconName"><span class="ms-2">{{ $t(route.meta.title) }}</span></SidebarLink>
             <!-- <li class="nav-item mb-1">
                     <a href="#" class="">
                         <i class="fa-solid fa-bell"></i>
@@ -17,9 +17,11 @@
         </ul>
         <hr>
         <SidebarProfile />
-        <div class="mt-3 d-inline-flex justify-content-between ">
-            <SignOutBtn />
-            <ThemeBtn :is-show-label="true" />
+        <div class="mt-2">
+            <div class="d-flex gap-2">
+                <SignOutBtn class="flex-fill" />
+                <ThemeBtn :is-show-label="true" />
+            </div>
         </div>
     </div>
 </template>
@@ -35,7 +37,7 @@ defineProps({
     brand: { type: String, default: 'meteor template' }
 })
 
-const adminRoutes = routes[0].children[1].children.filter((r) => r.meta.isParent);
+const adminRoutes = routes[0].children[1].children.filter((r) => r.meta.isParent && r.name != "core.auth.admin.profile");
 </script>
 
 <style>

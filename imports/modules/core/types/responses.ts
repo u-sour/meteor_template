@@ -5,7 +5,7 @@ interface Data {
 }
 
 export interface ThrowSuccess {
-    data: Data,
+    data?: Data,
     status: number,
     message: string
 }

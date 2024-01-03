@@ -8,6 +8,13 @@ export const useAuthStore = defineStore('auth', () => {
     const _user = ref<User>();
     //getter
     const user = computed(() => _user.value);
+    const userId = computed(() => _user.value._id);
+    const username = computed(() => _user.value.username);
+    const profile = computed(() => _user.value.profile);
+    const fullName = computed(() => `${_user.value.profile.firstName} ${_user.value.profile.lastName}`);
+    const job = computed(() => _user.value.profile.job || 'Unknown');
+    const email = computed(() => _user.value.emails[0].address);
+    const status = computed(() => _user.value.profile.status);
     //methods
     const setUser = (userId: string | null) => {
         if (userId) {
@@ -17,6 +24,7 @@ export const useAuthStore = defineStore('auth', () => {
                 }
                 // filter user data
                 const userData = <User>{
+                    _id: res._id,
                     username: res.username,
                     emails: res.emails,
                     profile: res.profile,
@@ -26,5 +34,5 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    return { user, setUser }
+    return { user, userId, username, fullName, job, profile, email, status, setUser }
 })
