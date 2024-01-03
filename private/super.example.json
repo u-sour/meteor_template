@@ -6,8 +6,9 @@
         "profile": {
             "firstName": "",
             "lastName": "",
-            "status": "",
-            "profilePic": ""
+            "phoneNumber":"",
+            "profileImage": "",
+            "status": ""
         },
         "roles": "super"
     }

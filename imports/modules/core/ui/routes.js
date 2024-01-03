@@ -1,3 +1,5 @@
+const labelAdminPrefix = 'core.pages.admin';
+const labelPageTypesPrefix = 'core.pageTypes';
 const routes = [
     {
         path: '/core',
@@ -36,14 +38,32 @@ const routes = [
                         name: 'core.auth.admin.dashboard',
                         component: () => import('./pages/admin/Dashboard.vue'),
                         meta: {
-                            title: 'Dashboard',
+                            title: `${labelAdminPrefix}.dashboard.title`,
                             iconName: 'SolarSiderbarLinear',
                             isParent: true,
                             breadcrumb: {
-                                title: 'Index',
+                                title: `${labelPageTypesPrefix}.index`,
                                 parent: {
-                                    title: 'Dashboard',
+                                    title: `${labelAdminPrefix}.dashboard.title`,
                                     route: 'core.auth.admin.dashboard'
+                                },
+                            },
+                        }
+                    },
+                    // Profile
+                    {
+                        path: '/core/auth/admin/profile',
+                        name: 'core.auth.admin.profile',
+                        component: () => import('./pages/admin/profile/index.vue'),
+                        meta: {
+                            title: `${labelAdminPrefix}.profile.title`,
+                            iconName: 'SolarSmileCircleLinear',
+                            isParent: true,
+                            breadcrumb: {
+                                title: `${labelPageTypesPrefix}.index`,
+                                parent: {
+                                    title: `${labelAdminPrefix}.profile.title`,
+                                    route: 'core.auth.admin.profile'
                                 },
                             },
                         }
@@ -54,16 +74,16 @@ const routes = [
                         name: 'core.auth.admin.users',
                         component: () => import('./pages/admin/users/Index.vue'),
                         meta: {
-                            title: 'Users',
+                            title: `${labelAdminPrefix}.users.title`,
                             iconName: 'SolarSmileCircleLinear',
                             isParent: true,
                             create: {
                                 route: 'core.auth.admin.users.create'
                             },
                             breadcrumb: {
-                                title: 'Index',
+                                title: `${labelPageTypesPrefix}.index`,
                                 parent: {
-                                    title: 'Users',
+                                    title: `${labelAdminPrefix}.users.title`,
                                     route: 'core.auth.admin.users'
                                 },
                             },
@@ -77,7 +97,7 @@ const routes = [
                             title: 'Users',
                             iconName: 'SolarSmileCircleLinear',
                             breadcrumb: {
-                                title: 'Create',
+                                title: `${labelPageTypesPrefix}.create`,
                                 parent: {
                                     title: 'Users',
                                     route: 'core.auth.admin.users'
@@ -91,13 +111,13 @@ const routes = [
                         name: 'core.auth.admin.settings',
                         component: () => import('./pages/admin/Settings.vue'),
                         meta: {
-                            title: 'Settings',
+                            title: `${labelAdminPrefix}.settings.title`,
                             iconName: 'SolarSettingsLinear',
                             isParent: true,
                             breadcrumb: {
-                                title: 'Index',
+                                title: `${labelPageTypesPrefix}.index`,
                                 parent: {
-                                    title: 'Settings',
+                                    title: `${labelAdminPrefix}.settings.title`,
                                     route: 'core.auth.admin.settings'
                                 },
                             },

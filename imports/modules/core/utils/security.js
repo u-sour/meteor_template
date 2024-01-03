@@ -5,7 +5,7 @@ export const userLoggedIn = () => {
     if (Meteor.userId()) {
         return true
     }
-    throw new Meteor.Error('logged-out', 'The user is not login')
+    throw new Meteor.Error(401, 'Authorization required', 'Sorry, you are not authorized to access.')
 }
 
 export const userIsInRole = (roles) => {

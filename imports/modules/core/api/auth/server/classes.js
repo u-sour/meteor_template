@@ -5,11 +5,11 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 
 // schema
-import { InsertSchema, UpdateSchema } from "../schema";
+import { InsertSchema, UpdateSchema, UpdateProfileSchema } from "../schema";
 // security
-import { userIsInRole } from '../../../utils/security'
+import { userIsInRole, userLoggedIn } from '../../../utils/security'
 // responses
-import { throwError } from '../../../utils/responses'
+import { throwError, throwSuccess } from '../../../utils/responses'
 
 class Admin {
     // Find
@@ -58,12 +58,12 @@ class Admin {
         }).validator(),
         run({ _id }) {
             if (Meteor.isServer) {
-                let profilePic = FileImages.findOne({ _id })
-                if (profilePic) {
-                    profilePic.url = FileImages.findOne({ _id }).url()
+                let profileImage = FileImages.findOne({ _id })
+                if (profileImage) {
+                    profileImage.url = FileImages.findOne({ _id }).url()
                 }
 
-                return profilePic
+                return profileImage
             }
         },
     })
@@ -89,8 +89,8 @@ class Admin {
                         profile: {
                             firstName: user.firstName,
                             lastName: user.lastName,
+                            profileImage: user.profileImage,
                             status: user.status,
-                            profilePic: user.profilePic,
                         },
                     })
                     // Add roles
@@ -109,12 +109,12 @@ class Admin {
         name: 'core.admin.updateUser',
         mixins: [CallPromiseMixin],
         validate: new SimpleSchema({
-            user: UpdateSchema,
+            user: UpdateProfileSchema,
         }).validator(),
         run({ user }) {
             if (Meteor.isServer) {
                 // Check role
-                // userIsInRole(['super', 'admin'])
+                userIsInRole(['super', 'admin'])
 
                 try {
                     // Update user
@@ -127,8 +127,8 @@ class Admin {
                                 profile: {
                                     firstName: user.firstName,
                                     lastName: user.lastName,
+                                    profileImage: user.profileImage,
                                     status: user.status,
-                                    profilePic: user.profilePic,
                                 },
                             },
                         }
@@ -143,6 +143,65 @@ class Admin {
                     }
 
                     return 'success'
+                } catch (e) {
+                    throwError(e)
+                }
+            }
+        },
+    })
+
+    // Update Profile
+    updateProfile = new ValidatedMethod({
+        name: 'core.admin.updateProfile',
+        mixins: [CallPromiseMixin],
+        validate: new SimpleSchema({
+            user: UpdateProfileSchema,
+        }).validator(),
+        async run({ user }) {
+            if (Meteor.isServer) {
+                try {
+                    // Check authorization
+                    userLoggedIn();
+                    // Check if profile image is existed then delete it from cloudinary 
+                    // if (user.profileImage && user.profileImage.publicId) {
+                    // }
+                    // Upload a new profile image
+                    // const folderName = `Meteor Template : Profile ${user._id} - ${user.username}`;
+                    // const profileImageUploaded = await cloudinary.uploader.upload(user.profileImage.base64, { folder: folderName })
+                    // user.profileImage.publicId = profileImageUploaded.public_id
+                    // user.profileImage.url = profileImageUploaded.secure_url
+
+                    // Update profile
+                    Meteor.users.update(
+                        { _id: user._id },
+                        {
+                            $set: {
+                                username: user.username,
+                                'emails.0.address': user.email,
+                                profile: {
+                                    firstName: user.firstName,
+                                    lastName: user.lastName,
+                                    about: user.about,
+                                    company: user.company,
+                                    job: user.job,
+                                    address: user.address,
+                                    phoneNumber: user.phoneNumber,
+                                    profileImage: user.profileImage,
+                                    status: user.status,
+                                },
+                            },
+                        }
+                    )
+                    // Update roles
+                    // Roles.setUserRoles(user._id, user.roles)
+
+                    // Update password
+                    // Accounts.setPassword(user._id, user.password, { logout: false })
+                    // if (user._id === Meteor.userId()) {
+                    //     return 'logout'
+                    // }
+
+                    return throwSuccess.updateProfile();
                 } catch (e) {
                     throwError(e)
                 }
@@ -170,12 +229,54 @@ class Admin {
             }
         },
     })
+
+    // check user exist
+    checkUserExisted = new ValidatedMethod({
+        name: 'core.admin.checkUserExisted',
+        mixins: [CallPromiseMixin],
+        validate: new SimpleSchema({
+            selector: {
+                type: Object,
+                blackbox: true,
+            },
+        }).validator(),
+        run({ selector }) {
+            if (Meteor.isServer) {
+                try {
+                    return Meteor.users.findOne(selector)
+                } catch (e) {
+                    throwError(e)
+                }
+            }
+        },
+    })
+
+    // check current password with new password
+    // checkUserCurrentPassword = new ValidatedMethod({
+    //     name: 'core.admin.checkUserCurrentPassword',
+    //     mixins: [CallPromiseMixin],
+    //     validate: new SimpleSchema({
+    //         password: String,
+    //     }).validator(),
+    //     run({ password }) {
+    //         if (Meteor.isServer) {
+    //             let digest = Package.sha.SHA256(password)
+    //             let user = Meteor.user()
+    //             let passwordOpts = { digest: digest, algorithm: 'sha-256' }
+    //             // try {
+    //             let result = Accounts._checkPassword(user, passwordOpts)
+    //             console.log("🚀 ~ file: classes.js:209 ~ Admin ~ run ~ result:", result)
+    //             // Accounts._checkPassword(user, passwordOpts)
+    //             // return true;
+    //             return result;
+    //             // } catch (e) {
+    //             //     console.log("🚀 ~ file: classes.js:211 ~ Admin ~ run ~ e:", e)
+    //             //     throwError(e)
+    //             // }
+    //         }
+    //     },
+    // })
+
 }
 
 export default new Admin();
-
-// class Authencation {
-//     admin = new Admin();
-// }
-// const auth = new Authencation()
-// export default auth;

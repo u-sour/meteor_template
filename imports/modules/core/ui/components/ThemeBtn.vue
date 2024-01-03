@@ -3,7 +3,8 @@
     <label class="btn btn-outline-light d-inline-flex align-items-center" for="theme" @click="toggleDark()">
         <SunAnimationIcon class="icon" v-if="!isDark" />
         <MoonAnimationIcon class="icon" v-else />
-        <span class="ms-2" v-if="isShowLabel">{{ !isDark ? 'Light' : 'Dark' }}</span>
+        <span class="ms-2" v-if="isShowLabel">{{ $t(!isDark ? 'core.btns.themeMode.light' : 'core.btns.themeMode.dark')
+        }}</span>
     </label>
 </template>
 

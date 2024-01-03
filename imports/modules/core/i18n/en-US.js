@@ -30,11 +30,70 @@ export default {
                 }
             }
         },
+        admin: {
+            dashboard: {
+                title: 'Dashboard',
+            },
+            profile: {
+                title: 'Profile',
+                overview: {
+                    title: 'Overview',
+                    about: 'About',
+                    profileDetails: {
+                        title: 'Profile Details',
+                        form: {
+                            fullName: 'Full Name',
+                            company: 'Company',
+                            job: 'Job',
+                            country: 'Country',
+                            address: 'Address',
+                            phoneNumber: 'Phone Number',
+                            email: 'Email'
+                        }
+                    }
+                },
+                editProfile: {
+                    title: 'Edit Profile',
+                    form: {
+                        profileImage: 'Profile Image',
+                        firstName: 'First Name',
+                        lastName: 'Last Name',
+                        username: 'Username',
+                        about: 'About',
+                        company: 'Company',
+                        job: 'Job',
+                        country: 'Country',
+                        address: 'Address',
+                        phoneNumber: 'Phone Number',
+                        email: 'Email'
+                    }
+                },
+                changePassword: {
+                    title: 'Change Password',
+                    form: {
+                        currentPassword: 'Current Password',
+                        newPassword: 'New Password',
+                        confirmNewPassword: 'Confirm New Password',
+                    }
+                }
+            },
+            users: {
+                title: 'Users',
+            },
+            settings: {
+                title: 'Settings',
+            }
+        },
         notFound: {
             title: '404',
             subTitle: 'Page Not Found.',
             content: 'The page you requested could not be found.'
         }
+    },
+    pageTypes: {
+        index: 'Index',
+        create: 'Create',
+        edit: 'Edit'
     },
     messages: {
         auth: {
@@ -54,6 +113,10 @@ export default {
             signUp: 'Sign Up',
             signOut: 'Sign Out',
         },
+        profile: {
+            saveChange: 'Save Changes',
+            changePassword: 'Change Password'
+        },
         transaction: {
             create: 'Create',
             submit: 'Submit',
@@ -61,6 +124,10 @@ export default {
             remove: 'Remove',
             yes: 'Yes',
             cancel: 'Cancel',
+        },
+        themeMode: {
+            light: 'Light',
+            dark: 'Dark'
         },
         other: {
             goBack: 'Go Back'
