@@ -1,44 +1,38 @@
 <template>
     <div class="col">
-        <FormKit type="form" id="editProfileForm" :value="initData" @submit="submit" #default="{ value }" :actions="false"
+        <FormKit type="form" id="editProfileForm" v-model="initData" @submit="submit" #default="{ value }" :actions="false"
             :disabled="submitted">
-            <!-- <FormKit type="file" name="profileImageFile" :label="$t(`${labelPrefix}.form.profileImage`)"
-                accept=".jpg,.jpeg,.png" :wrapper-class="{ 'formkit-wrapper': false }" outer-class="col-12"
-                file-item-icon="" no-files-icon="fileImage" help="Select one image that you like for your profile.">
+            <FormKit type="file" name="profileImageFile" :label="$t(`${labelPrefix}.form.profileImage`)"
+                accept=".jpg,.jpeg,.png" :file-item-icon="null" no-files-icon="fileImage"
+                help="Select one image that you like for your profile.">
                 <template #prefix>
-                    <ImagePreview :imageFile="value.profileImageFile" />
+                    <ImagePreview :imageFile="initData.profileImageFile" />
                 </template>
-            </FormKit> -->
+            </FormKit>
             <div class="row">
                 <div class="col-6">
                     <FormKit name="firstName" :label="$t(`${labelPrefix}.form.firstName`)"
-                        :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
+                        :validation="validations.userInfo" />
                 </div>
                 <div class="col-6">
                     <FormKit name="lastName" :label="$t(`${labelPrefix}.form.lastName`)"
-                        :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
+                        :validation="validations.userInfo" />
                 </div>
             </div>
-            <FormKit name="username" :label="$t(`${labelPrefix}.form.username`)"
-                :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
+            <FormKit name="username" :label="$t(`${labelPrefix}.form.username`)" :validation="validations.userInfo" />
             <FormKit type="textarea" name="about" :label="$t(`${labelPrefix}.form.about`)"
-                :wrapper-class="{ 'formkit-wrapper': false }" placeholder="write something about yourself."
-                :help="`${value.about ? value.about.length : 0} / 120`" validation="length:0,120"
-                validation-visibility="live" :validation-messages="{
+                placeholder="write something about yourself." :help="`${value.about ? value.about.length : 0} / 120`"
+                validation="length:0,120" validation-visibility="live" :validation-messages="{
                     length: 'About cannot be more than 120 characters.',
                 }" />
-            <FormKit name="company" :label="$t(`${labelPrefix}.form.company`)"
-                :wrapper-class="{ 'formkit-wrapper': false }" />
-            <FormKit name="job" :label="$t(`${labelPrefix}.form.job`)" :wrapper-class="{ 'formkit-wrapper': false }" />
-            <FormKit name="address" :label="$t(`${labelPrefix}.form.address`)"
-                :wrapper-class="{ 'formkit-wrapper': false }" />
-            <FormKit name="phoneNumber" :label="$t(`${labelPrefix}.form.phoneNumber`)"
-                :wrapper-class="{ 'formkit-wrapper': false }" validation="required" />
-            <FormKit name="email" :label="$t(`${labelPrefix}.form.email`)" :wrapper-class="{ 'formkit-wrapper': false }"
-                :validation="validations.email" />
+            <FormKit name="company" :label="$t(`${labelPrefix}.form.company`)" />
+            <FormKit name="job" :label="$t(`${labelPrefix}.form.job`)" />
+            <FormKit name="address" :label="$t(`${labelPrefix}.form.address`)" />
+            <FormKit name="phoneNumber" :label="$t(`${labelPrefix}.form.phoneNumber`)" validation="required" />
+            <FormKit name="email" :label="$t(`${labelPrefix}.form.email`)" :validation="validations.email" />
             <div>
-                <button class="btn btn-primary fw-bold" type="submit" :disabled="submitted">{{
-                    $t('core.btns.profile.saveChange') }}</button>
+                <FormActions :submitted="submitted" submit-label-btn="core.btns.profile.saveChange"
+                    :enable-cancel-btn="false" />
             </div>
 
         </FormKit>
@@ -46,24 +40,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs } from 'vue';
-import { reset } from '@formkit/core';
-import auth from '../../../api/auth/class';
+import { Meteor } from 'meteor/meteor';
+import { ref, onMounted, toRefs } from 'vue';
 import { useAuthStore } from '../../../stores/auth';
 import { EditProfileForm } from '../../../types/authentication';
-import ConvertFile from '../../../utils/convert-file';
+import { updateProfile } from '../../../api/auth/server/methods';
 import compressor from '../../../utils/compressor';
+import convertFile from '../../../utils/convert-file';
 import ImagePreview from '../ImagePreview.vue';
 import notify from '../../../utils/notify';
+import FormActions from '../form/FormActions.vue';
 
 defineProps({
     labelPrefix: { type: String, required: true }
 })
+
 const authStore = useAuthStore();
 const { userId, username, profile, email, status } = toRefs(authStore);
-const initData: EditProfileForm =
-{
+const initData = ref<EditProfileForm>({
     _id: userId.value,
+    profileImage: profile.value.profileImage || {},
     firstName: profile.value.firstName,
     lastName: profile.value.lastName,
     username: username.value,
@@ -74,7 +70,17 @@ const initData: EditProfileForm =
     phoneNumber: profile.value.phoneNumber,
     email: email.value,
     status: status.value
-}
+})
+
+onMounted(async () => {
+    // convert profile image name,url to file
+    if (profile.value.profileImage) {
+        const fileName = profile.value.profileImage.name;
+        const fileUrl = profile.value.profileImage.url;
+        const file = await convertFile.fromUrl(fileUrl, fileName)
+        initData.value.profileImageFile = [{ name: fileName, file: file }]
+    }
+})
 
 const validations = {
     userInfo: "required|length:4",
@@ -85,21 +91,33 @@ const validations = {
 const submitted = ref(false)
 
 const submit = async (form: EditProfileForm) => {
-    // compress file image & convert to base 64
-    // if (form.profileImageFile) {
-    //     const blob_file = (await compressor(form.profileImageFile[0].file)) as Blob
-    //     const base64 = await ConvertFile.toBase64(blob_file)
-    //     form.profileImage.name = form.profileImage[0].name;
-    //     form.profileImage.base64 = base64;
-    // }
     submitted.value = true;
-    auth.admin.updateProfile.call({ user: form }, (err, res) => {
+    // check if profileImageFile field value is existed and file name isn't the same 
+    const profileImageFile = form.profileImageFile![0];
+    if (profileImageFile && profileImageFile.name != initData.value.profileImage?.name) {
+        // compress file size & convert to base 64
+        const folderPath = `Meteor Template/Profile/${form._id} - ${form.username}`;
+        const blob_file = (await compressor(profileImageFile.file!)) as Blob
+        const base64 = await convertFile.toBase64(blob_file)
+        // call upload edit method
+        const res = await Meteor.callAsync('core.admin.upload.edit.profile', { upload: { folderPath, base64 } });
+        // prepare data for update profile method
+        if (res.data && form.profileImage) {
+            form.profileImage.publicId = res.data.public_id
+            form.profileImage.name = profileImageFile.name;
+            form.profileImage.url = res.data.secure_url
+        }
+    }
+    // omit
+    if (!profileImageFile) delete form["profileImage"];
+    delete form["profileImageFile"];
+    // call update profile method
+    updateProfile.call({ user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;
             return notify.error(err.message);
         }
         submitted.value = false;
-        reset('editProfileForm');
         notify.success(res.message)
     })
 }

@@ -1,0 +1,13 @@
+{
+  "public": {
+    "cloudinary": {
+      "cloud_name": "",
+      "api_key": ""
+    }
+  },
+  "private": {
+    "cloudinary": {
+      "api_secret": ""
+    }
+  }
+}

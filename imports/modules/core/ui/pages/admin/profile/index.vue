@@ -1,12 +1,13 @@
 <template>
     <div class="row g-3">
         <div class="col-lg-2">
-            <div class="card bg-light-subtle border-0 py-3 d-flex align-items-center">
-                <img src="/images/404/No-Image-Placeholder.svg" class="profile-img rounded me-2 mb-2" alt="profile image">
+            <div class="card bg-light-subtle border-0 py-5 d-flex flex-column align-items-center">
+                <AdvancedImagePreview class="profile-img rounded" :public-id="profile.profileImage.publicId"
+                    :name="profile.profileImage.name" v-if="profile.profileImage" />
+                <ImageNotFound v-else />
                 <div class="card-body text-center">
                     <h5 class="card-title">{{ fullName.toUpperCase() }}</h5>
                     <p class="card-text">{{ job }}</p>
-                    <!-- <RouterLink to="" class="btn btn-primary">Edit Profile</RouterLink> -->
                 </div>
             </div>
         </div>
@@ -51,6 +52,8 @@
 <script setup lang="ts">
 import { toRefs } from 'vue';
 import { useAuthStore } from '../../../../stores/auth';
+import AdvancedImagePreview from '../../../components/AdvancedImagePreview.vue';
+import ImageNotFound from '../../../components/ImageNotFound.vue';
 import Overview from '../../../components/profile/Overview.vue';
 import EditProfileForm from '../../../components/profile/EditProfileForm.vue';
 import ChangePasswordForm from '../../../components/profile/ChangePasswordForm.vue';
@@ -59,7 +62,7 @@ const labelOverviewPrefix = 'core.pages.admin.profile.overview';
 const labelEditProfilePrefix = 'core.pages.admin.profile.editProfile';
 const labelChangePasswordPrefix = 'core.pages.admin.profile.changePassword';
 const authStore = useAuthStore()
-const { fullName, job } = toRefs(authStore)
+const { profile, fullName, job } = toRefs(authStore)
 </script>
 
 <style scoped>

@@ -10,8 +10,8 @@
 
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core'
-import SunAnimationIcon from './icons/SunAnimationIcon.vue'
-import MoonAnimationIcon from './icons/MoonAnimationIcon.vue'
+import SunAnimationIcon from './icons/themes/SunAnimationIcon.vue'
+import MoonAnimationIcon from './icons/themes/MoonAnimationIcon.vue'
 defineProps({
     isShowLabel: { type: Boolean, default: false }
 })

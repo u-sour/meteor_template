@@ -1,136 +1,173 @@
 export default {
-    pages: {
-        auth: {
-            signIn: {
-                title: '👋 Hello, Welcome Back!',
-                subTitle: 'Sign in with your data that you entered during your registration.',
-                form: {
-                    username: 'Username',
-                    password: 'Password',
-                    rememberMe: 'Remember Me'
-                },
-                components: {
-                    forgotPassword: 'Forgot Password',
-                    noAccount: "Don't have an account?",
-                }
-            },
-            signUp: {
-                title: 'Join us today!',
-                subTitle: 'Sign up now to become a member.',
-                form: {
-                    firstName: 'First Name',
-                    lastName: 'Last Name',
-                    email: 'Email',
-                    username: 'Username',
-                    password: 'Password',
-                    confirmPassword: 'Confirm Password'
-                },
-                components: {
-                    haveAccount: "Already have an account?",
-                }
-            }
+  pages: {
+    auth: {
+      signIn: {
+        title: '👋 Hello, Welcome Back!',
+        subTitle:
+          'Sign in with your data that you entered during your registration.',
+        form: {
+          username: 'Username',
+          password: 'Password',
+          rememberMe: 'Remember Me',
         },
-        admin: {
-            dashboard: {
-                title: 'Dashboard',
-            },
-            profile: {
-                title: 'Profile',
-                overview: {
-                    title: 'Overview',
-                    about: 'About',
-                    profileDetails: {
-                        title: 'Profile Details',
-                        form: {
-                            fullName: 'Full Name',
-                            company: 'Company',
-                            job: 'Job',
-                            country: 'Country',
-                            address: 'Address',
-                            phoneNumber: 'Phone Number',
-                            email: 'Email'
-                        }
-                    }
-                },
-                editProfile: {
-                    title: 'Edit Profile',
-                    form: {
-                        profileImage: 'Profile Image',
-                        firstName: 'First Name',
-                        lastName: 'Last Name',
-                        username: 'Username',
-                        about: 'About',
-                        company: 'Company',
-                        job: 'Job',
-                        country: 'Country',
-                        address: 'Address',
-                        phoneNumber: 'Phone Number',
-                        email: 'Email'
-                    }
-                },
-                changePassword: {
-                    title: 'Change Password',
-                    form: {
-                        currentPassword: 'Current Password',
-                        newPassword: 'New Password',
-                        confirmNewPassword: 'Confirm New Password',
-                    }
-                }
-            },
-            users: {
-                title: 'Users',
-            },
-            settings: {
-                title: 'Settings',
-            }
+        components: {
+          forgotPassword: 'Forgot Password',
+          noAccount: "Don't have an account?",
         },
-        notFound: {
-            title: '404',
-            subTitle: 'Page Not Found.',
-            content: 'The page you requested could not be found.'
-        }
+      },
+      signUp: {
+        title: 'Join us today!',
+        subTitle: 'Sign up now to become a member.',
+        form: {
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          username: 'Username',
+          email: 'Email',
+          phoneNumber: 'Phone Number',
+          password: 'Password',
+          confirmPassword: 'Confirm Password',
+        },
+        components: {
+          haveAccount: 'Already have an account?',
+        },
+      },
     },
-    pageTypes: {
-        index: 'Index',
-        create: 'Create',
-        edit: 'Edit'
+    admin: {
+      dashboard: {
+        title: 'Dashboard',
+      },
+      profile: {
+        title: 'Profile',
+        overview: {
+          title: 'Overview',
+          about: 'About',
+          profileDetails: {
+            title: 'Profile Details',
+            form: {
+              fullName: 'Full Name',
+              company: 'Company',
+              job: 'Job',
+              country: 'Country',
+              address: 'Address',
+              phoneNumber: 'Phone Number',
+              email: 'Email',
+            },
+          },
+        },
+        editProfile: {
+          title: 'Edit Profile',
+          form: {
+            profileImage: 'Profile Image',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            username: 'Username',
+            about: 'About',
+            company: 'Company',
+            job: 'Job',
+            country: 'Country',
+            address: 'Address',
+            phoneNumber: 'Phone Number',
+            email: 'Email',
+          },
+        },
+        changePassword: {
+          title: 'Change Password',
+          form: {
+            currentPassword: 'Current Password',
+            newPassword: 'New Password',
+            confirmNewPassword: 'Confirm New Password',
+          },
+        },
+      },
+      // note: comment EDT meaning for easy data table header labels
+      users: {
+        title: 'Users',
+        form: {
+          profileImage: 'Profile Image',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          fullName: 'Full Name', // EDT
+          username: 'Username',
+          about: 'About',
+          company: 'Company',
+          job: 'Job',
+          country: 'Country',
+          address: 'Address',
+          phoneNumber: 'Phone Number',
+          password: 'Password',
+          edit: {
+            changePassword: 'Do you want to change a new password?',
+            newPassword: 'New Password',
+          },
+          email: 'Email',
+          roles: {
+            label: 'Roles',
+            help: 'Select user roles',
+          },
+          status: 'Status', // EDT
+          operation: 'Operation', // EDT
+        },
+      },
+      settings: {
+        title: 'Settings',
+      },
     },
-    messages: {
-        auth: {
-            signedIn: "Hey, welcome back! let's start today.",
-            signedUp: 'Congratulation, account is created.',
-        },
-        transaction: {
-            saved: 'Transaction is saved.',
-            edited: 'Transaction is edited.',
-            confirmRemove: 'Are you sure?',
-            removed: 'Transaction is removed.',
-        }
+    notFound: {
+      title: '404',
+      subTitle: 'Page Not Found.',
+      content: 'The page you requested could not be found.',
     },
-    btns: {
-        auth: {
-            signIn: 'Sign In',
-            signUp: 'Sign Up',
-            signOut: 'Sign Out',
-        },
-        profile: {
-            saveChange: 'Save Changes',
-            changePassword: 'Change Password'
-        },
-        transaction: {
-            create: 'Create',
-            submit: 'Submit',
-            edit: 'Edit',
-            remove: 'Remove',
-            yes: 'Yes',
-            cancel: 'Cancel',
-        },
-        themeMode: {
-            light: 'Light',
-            dark: 'Dark'
-        },
-        other: {
-            goBack: 'Go Back'
-        }
+  },
+  pageTypes: {
+    index: 'Index',
+    create: 'Create',
+    edit: 'Edit',
+  },
+  pageFilter: {
+    search: 'Search...',
+    rowsPerPage: 'Records Per Page:',
+  },
+  messages: {
+    auth: {
+      signedIn: "Hey, welcome back! let's start today.",
+      signedUp: 'Congratulation, account is created.',
     },
+    transaction: {
+      saved: 'Transaction is saved.',
+      edited: 'Transaction is edited.',
+      confirm: 'Are you sure want to remove this record?',
+      removed: 'Transaction is removed.',
+    },
+    other: {
+      loading: 'Loading Data ...',
+      processing: 'Processing ...',
+      emptyData: 'No Available Data',
+    },
+  },
+  btns: {
+    auth: {
+      signIn: 'Sign In',
+      signUp: 'Sign Up',
+      signOut: 'Sign Out',
+    },
+    profile: {
+      saveChange: 'Save Changes',
+      changePassword: 'Change Password',
+    },
+    transaction: {
+      create: 'Create',
+      submit: 'Submit',
+      edit: 'Edit',
+      remove: 'Remove',
+      yes: 'Yes',
+      cancel: 'Cancel',
+    },
+    themeMode: {
+      light: 'Light',
+      dark: 'Dark',
+    },
+    other: {
+      goBack: 'Go Back',
+    },
+  },
 }

@@ -4,8 +4,9 @@ export interface SignUpFrom {
     username: string,
     email: string,
     password: string,
-    confirmPassword: string
-    status: string
+    phoneNumber: string,
+    confirmPassword: string,
+    status: string,
     roles: string[]
 }
 export interface SignInForm {
@@ -36,10 +37,9 @@ interface ProfileImageFile {
 }
 
 interface ProfileImage {
-    publicId?: string,
+    publicId: string,
     name: string,
-    base64: string,
-    url?: string,
+    url: string,
 }
 
 export interface changePasswordForm {
@@ -66,7 +66,7 @@ interface Email {
 }
 
 interface UserProfile {
-    profileImage?: string,
+    profileImage: ProfileImage,
     firstName: string,
     lastName: string,
     about?: string,

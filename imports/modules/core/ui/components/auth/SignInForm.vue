@@ -2,14 +2,12 @@
     <h1 class="fw-bolder">{{ $t("core.pages.auth.signIn.title") }}</h1>
     <h6>{{ $t("core.pages.auth.signIn.subTitle") }}</h6>
     <div class="mt-5">
-        <FormKit type="form" id="signInForm" @submit="signIn" :actions="false" :disabled="submitted">
+        <FormKit type="form" id="signInForm" @submit="submit" :actions="false" :disabled="submitted">
             <FormKit type="text" name="username" :label="$t('core.pages.auth.signIn.form.username')"
-                :value="authStorage.username" :wrapper-class="{ 'formkit-wrapper': false }"
-                :validation="validations.username" autocomplete="off" />
+                :value="authStorage.username" :validation="validations.username" autocomplete="off" />
             <FormKit type="password" name="password" :label="$t('core.pages.auth.signIn.form.password')"
                 prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
-                :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.password"
-                @suffix-icon-click="toggleShowPassword" />
+                :validation="validations.password" @suffix-icon-click="toggleShowPassword" />
             <div class="d-flex justify-content-between align-items-center">
                 <FormKit type="checkbox" :label="$t('core.pages.auth.signIn.form.rememberMe')" name="rememberMe"
                     :value="authStorage.rememberMe" />
@@ -33,7 +31,7 @@
 import { ref } from 'vue';
 import { reset } from '@formkit/core'
 import notify from '../../../utils/notify'
-import auth from '../../../api/auth/class'
+import { signIn } from '../../../api/auth/client/methods';
 import authLocalStorage from '../../../storage/auth'
 import { SignInForm, RememberMe } from '../../../types/authentication';
 import { useAuthStore } from '../../../stores/auth'
@@ -54,14 +52,16 @@ const toggleShowPassword = (node: any, e: any) => {
 // get rememberme data from local storage
 const authStorage: RememberMe = JSON.parse(authLocalStorage.getRememberMe()!) ?? {}
 
-const signIn = async (form: SignInForm) => {
+const submit = async (form: SignInForm) => {
     submitted.value = true
-    auth.user.signIn(form).then((res) => {
-        authStore.setUser(res.data.userId)
-        submitted.value = false;
-        reset('signInForm');
-        router.replace({ name: 'core.auth.admin.dashboard' })
-        notify.success(res.message)
+    signIn(form).then((res) => {
+        if (res.data) {
+            authStore.setUser(res.data.userId)
+            submitted.value = false;
+            reset('signInForm');
+            router.replace({ name: 'core.auth.admin.dashboard' })
+            notify.success(res.message)
+        }
     }).catch((err) => {
         submitted.value = false;
         return notify.error(err.message);

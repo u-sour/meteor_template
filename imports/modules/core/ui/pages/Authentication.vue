@@ -27,7 +27,7 @@ import ThemeBtn from '../components/ThemeBtn.vue';
 const { locale } = useI18n()
 const companyName = "YOUR COMPANY NAME";
 
-// set defualt locale
+// set default locale
 const currentLocale = ref(localStorage.getItem('locale') || 'en')
 watch(currentLocale, (lang) => {
     localStorage.setItem('locale', lang)

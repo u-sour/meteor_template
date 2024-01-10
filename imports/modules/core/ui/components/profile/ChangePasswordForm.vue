@@ -3,19 +3,16 @@
         <FormKit type="form" id="changePasswordForm" @submit="submit" :actions="false" :disabled="submitted">
             <FormKit type="password" name="currentPassword" :label="$t(`${labelPrefix}.form.currentPassword`)"
                 prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
-                :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.password"
-                @suffix-icon-click="toggleShowPassword" />
+                :validation="validations.password" @suffix-icon-click="toggleShowPassword" />
             <FormKit type="password" name="newPassword" :label="$t(`${labelPrefix}.form.newPassword`)"
                 prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
-                :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.password"
-                @suffix-icon-click="toggleShowPassword" />
+                :validation="validations.password" @suffix-icon-click="toggleShowPassword" />
             <FormKit type="password" name="confirmNewPassword" :label="$t(`${labelPrefix}.form.confirmNewPassword`)"
                 prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
-                :wrapper-class="{ 'formkit-wrapper': false }" :validation="`${validations.password}|confirm:newPassword`"
-                @suffix-icon-click="toggleShowPassword" />
+                :validation="`${validations.password}|confirm:newPassword`" @suffix-icon-click="toggleShowPassword" />
             <div>
-                <button class="btn btn-primary fw-bold" type="submit" :disabled="submitted">{{
-                    $t('core.btns.profile.changePassword') }}</button>
+                <FormActions :submitted="submitted" submit-label-btn="core.btns.profile.changePassword"
+                    :enable-cancel-btn="false" />
             </div>
         </FormKit>
     </div>
@@ -23,10 +20,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import auth from '../../../api/auth/class'
 import { reset } from '@formkit/core';
 import { changePasswordForm } from '../../../types/authentication';
 import notify from '../../../utils/notify'
+import FormActions from '../form/FormActions.vue';
+import { changePassword } from '../../../api/auth/client/methods';
 
 defineProps({
     labelPrefix: { type: String, required: true }
@@ -44,7 +42,7 @@ const toggleShowPassword = (node: any, e: any) => {
 
 const submit = (form: changePasswordForm) => {
     submitted.value = true;
-    auth.user.changePassword(form).then((res) => {
+    changePassword(form).then((res) => {
         submitted.value = false;
         reset('changePasswordForm');
         notify.success(res.message)

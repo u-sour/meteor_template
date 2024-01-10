@@ -1,15 +1,14 @@
 [
-    {
-        "username": "",
-        "email": "",
-        "password": "",
-        "profile": {
-            "firstName": "",
-            "lastName": "",
-            "phoneNumber":"",
-            "profileImage": "",
-            "status": ""
-        },
-        "roles": "super"
+  {
+    "username": "",
+    "email": "",
+    "password": "",
+    "profile": {
+      "firstName": "",
+      "lastName": "",
+      "phoneNumber": "",
+      "roles": [""],
+      "status": ""
     }
+  }
 ]

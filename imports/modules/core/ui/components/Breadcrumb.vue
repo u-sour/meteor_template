@@ -1,7 +1,7 @@
 <template>
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between align-items-center">
         <nav style="--bs-breadcrumb-divider:'>';font-size:14px">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb mt-3">
                 <li class="breadcrumb-item">
                     <RouterLink class="text-decoration-none" :to="{ name: breadcrumb.parent.route }">{{
                         $t(breadcrumb.parent.title)
