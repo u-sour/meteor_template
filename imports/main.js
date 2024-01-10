@@ -7,10 +7,12 @@ import vue3ProgressbarConfig from './modules/core/utils/config/vue3-progressbar.
 import i18nConfig from './modules/core/utils/config/i18n.config'
 import fkConfig from './modules/core/utils/config/formkit.config'
 import { plugin, defaultConfig } from '@formkit/vue'
+import Vue3EasyDataTable from 'vue3-easy-data-table'
 import 'bootstrap'
 import '/imports/styles/main.scss'
 import '@formkit/themes/genesis'
 import 'vue3-toastify/dist/index.css';
+import 'vue3-easy-data-table/dist/style.css';
 import App from './App.vue'
 import { router } from './router'
 
@@ -23,6 +25,7 @@ Meteor.startup(() => {
   app.use(i18nConfig)
   app.use(VueProgressBar, vue3ProgressbarConfig)
   app.use(plugin, defaultConfig(fkConfig))
+  app.component('EasyDataTable', Vue3EasyDataTable);
   app.mount('#app')
 
   const progress = app.config.globalProperties.$Progress

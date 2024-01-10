@@ -7,25 +7,23 @@
                 <div class="row">
                     <div class="col-6">
                         <FormKit name="firstName" :label="$t('core.pages.auth.signUp.form.firstName')"
-                            :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
+                            :validation="validations.userInfo" />
                     </div>
                     <div class="col-6">
                         <FormKit name="lastName" :label="$t('core.pages.auth.signUp.form.lastName')"
-                            :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
+                            :validation="validations.userInfo" />
                     </div>
                 </div>
                 <FormKit name="username" :label="$t('core.pages.auth.signUp.form.username')"
-                    :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.userInfo" />
-                <FormKit name="email" :label="$t('core.pages.auth.signUp.form.email')"
-                    :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.email" />
+                    :validation="validations.userInfo" />
+                <FormKit name="email" :label="$t('core.pages.auth.signUp.form.email')" :validation="validations.email" />
+                <FormKit name="phoneNumber" :label="$t('core.pages.auth.signUp.form.phoneNumber')" validation="required" />
                 <FormKit type="password" name="password" :label="$t('core.pages.auth.signUp.form.password')"
                     prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
-                    :wrapper-class="{ 'formkit-wrapper': false }" :validation="validations.password"
-                    @suffix-icon-click="toggleShowPassword" />
+                    :validation="validations.password" @suffix-icon-click="toggleShowPassword" />
                 <FormKit type="password" name="confirmPassword" :label="$t('core.pages.auth.signUp.form.confirmPassword')"
                     prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
-                    :wrapper-class="{ 'formkit-wrapper': false }" :validation="`${validations.password}|confirm:password`"
-                    @suffix-icon-click="toggleShowPassword" />
+                    :validation="`${validations.password}|confirm:password`" @suffix-icon-click="toggleShowPassword" />
                 <div class="d-grid gap-2">
                     <button class="btn btn-primary fw-bold" type="submit" :disabled="submitted">{{
                         $t('core.btns.auth.signUp').toUpperCase() }}</button>
@@ -44,9 +42,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { reset } from '@formkit/core'
-import auth from '../../../api/auth/class'
 import { SignUpFrom } from '../../../types/authentication';
 import notify from '../../../utils/notify'
+import { insertUser } from '../../../api/auth/server/methods';
 
 const validations = {
     userInfo: "required|length:4",
@@ -62,14 +60,14 @@ const signUp = (form: SignUpFrom) => {
     form.status = 'inactive';
     form.roles = ['guest'];
     submitted.value = true;
-    auth.admin.insertUser.call({ user: form }, (err, res) => {
+    insertUser.call({ user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;
             return notify.error(err.message);
         }
         submitted.value = false;
         reset('signUpForm');
-        notify.success('congratulation, account have been created.')
+        notify.success(res.message)
     })
 }
 </script>

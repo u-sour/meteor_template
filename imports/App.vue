@@ -6,13 +6,13 @@
 </template>
 
 <script setup lang="ts">
-// import { autorun } from 'vue-meteor-tracker';
 import { ref, watch } from 'vue';
 import { useAuthStore } from './modules/core/stores/auth';
+import { Meteor } from 'meteor/meteor';
 
 const authStore = useAuthStore()
-// const userId = autorun(() => Meteor.userId()).result;
 const userId = ref(Meteor.userId());
+
 watch(
     () => userId.value,
     (newUserId) => {
