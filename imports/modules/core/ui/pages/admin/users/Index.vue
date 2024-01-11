@@ -13,15 +13,16 @@
                 <img class="avator" :src="avator" alt="" />
                 <a target="_blank" :href="page">{{ player }}</a>
             </div>
+        </template>-->
+        <template #item-status="{ status }">
+            <Status :text="status" :color="status === 'active' ? 'success' : 'danger'" />
         </template>
-        <template #item-team="{ teamName, teamUrl }">
-            <a target="_blank" :href="teamUrl">{{ teamName }}</a>
-        </template> -->
         <template #item-operation="item">
             <EasyDataTableActions @remove="removeItem(item)" @edit="editItem(item)" />
         </template>
     </EasyDataTable>
 </template>
+
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
@@ -30,6 +31,7 @@ import Processing from "../../../components/Processing.vue";
 import EasyDataTableSearch from "../../../components/easy-data-table/EasyDataTableSearch.vue";
 import EasyDataTableActions from '../../../components/easy-data-table/EasyDataTableActions.vue';
 import EmptyData from "../../../components/EmptyData.vue";
+import Status from "../../../components/Status.vue";
 import { useRouter } from "vue-router";
 import { findUsers, removeUser } from "/imports/modules/core/api/auth/server/methods";
 import notify from "/imports/modules/core/utils/notify";
