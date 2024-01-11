@@ -12,8 +12,8 @@ const props = defineProps({
     modelValue: { type: String, required: true }
 })
 const initData = [
-    { path: '/images/flags/en-US.svg', locale: 'en' },
-    { path: '/images/flags/km-KH.svg', locale: 'km' },
+    { path: '/images/i18n/en-US.svg', locale: 'en' },
+    { path: '/images/i18n/km-KH.svg', locale: 'km' },
 ]
 const flag = ref<Flag>(initData[0]);
 

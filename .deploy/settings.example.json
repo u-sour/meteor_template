@@ -2,7 +2,8 @@
   "public": {
     "cloudinary": {
       "cloud_name": "",
-      "api_key": ""
+      "api_key": "",
+      "upload_root_folder": ""
     }
   },
   "private": {

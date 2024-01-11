@@ -1,6 +1,6 @@
 const Icons = {
     // pages
-    dashboard: 'SolarSiderbarLinear',
+    dashboard: 'SolarWidget5Linear',
     profile: 'SolarSmileCircleLinear',
     users: 'SolarSmileCircleLinear',
     settings: 'SolarSettingsLinear',

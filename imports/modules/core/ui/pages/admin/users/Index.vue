@@ -34,6 +34,7 @@ import EmptyData from "../../../components/EmptyData.vue";
 import Status from "../../../components/Status.vue";
 import { useRouter } from "vue-router";
 import { findUsers, removeUser } from "/imports/modules/core/api/auth/server/methods";
+import uploadFolderPrefix from "/imports/modules/core/utils/upload-folder-prefix";
 import notify from "/imports/modules/core/utils/notify";
 import { Meteor } from "meteor/meteor";
 import { User } from "../../../../types/authentication"
@@ -73,14 +74,20 @@ findUsers.call({ selector: { _id: { $ne: Meteor.userId() } } }, (err: any, res: 
             username: user.username,
             email: user.emails[0].address,
             phoneNumber: user.profile.phoneNumber,
+            profileImage: user.profile.profileImage,
             status: user.profile.status
         })
     }
     loading.value = false;
 })
 
-const removeItem = (val: Item) => {
-    const { _id } = val;
+const removeItem = async (val: Item) => {
+    const { _id, username, profileImage: { publicId } } = val;
+    // call delete profile image method
+    if (publicId) {
+        await Meteor.callAsync('core.admin.upload.remove', { publicId, deleteEmptyFolder: true, folderPath: `${uploadFolderPrefix.profile}/${_id} - ${username}` });
+    }
+    // call remove user method
     removeUser.call({ _id }, (err: any, res: any) => {
         if (err) {
             notify.error(err.message)
