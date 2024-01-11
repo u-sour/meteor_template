@@ -3,8 +3,8 @@
         :class="{ 'active': isActive }">
         <AdvancedImagePreview class="profile-img rounded me-2" :public-id="profile.profileImage.publicId"
             :name="profile.profileImage.name" v-if="profile.profileImage" />
-        <ImageNotFound v-else :width="dimensions.width" :height="dimensions.height" />
-        <span class="d-flex flex-column align-items-baseline">
+        <ImageNotFound :width="dimensions.width" :height="dimensions.height" v-else />
+        <span class="d-flex flex-column align-items-baseline ms-2">
             <h6>{{ fullName.toUpperCase() }}</h6>
             <small>{{ email }}</small>
         </span>

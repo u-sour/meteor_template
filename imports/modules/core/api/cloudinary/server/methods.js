@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import { isEmpty } from 'lodash'
 import SimpleSchema from 'simpl-schema'
 
 // config
@@ -73,11 +74,8 @@ Meteor.methods({
     }
   },
   'core.admin.upload.find': async ({ folder }) => {
-    const options = {
-      type: 'upload',
-      prefix: folder,
-    }
     try {
+      const options = { type: 'upload', prefix: folder }
       const data = await cloudinary.api.resources(options)
       return throwSuccess.general({
         status: 200,
@@ -87,11 +85,28 @@ Meteor.methods({
       throwError(error)
     }
   },
-  'core.admin.upload.remove': async ({ publicId }) => {
+  'core.admin.upload.remove': async ({
+    publicId,
+    deleteEmptyFolder = false,
+    folderPath,
+  }) => {
     try {
       // Check role
       userIsInRole(['super', 'admin'])
+
+      // delete resource by publicId
       await cloudinary.uploader.destroy(publicId)
+
+      // delete folder
+      if (deleteEmptyFolder && folderPath) {
+        const options = { type: 'upload', prefix: folderPath }
+        // find all resources in folder
+        const data = await cloudinary.api.resources(options)
+        // if folder doesn't has any resources delete folder
+        if (isEmpty(data.resources)) {
+          await cloudinary.api.delete_folder(folderPath)
+        }
+      }
       return throwSuccess.general({
         status: 202,
         message: 'Transaction is removed.',

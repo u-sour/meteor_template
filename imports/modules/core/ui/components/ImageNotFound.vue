@@ -1,8 +1,8 @@
 <template>
-    <div class="col-12 d-flex flex-column justify-content-center align-items-center rounded bg-body-secondary"
-        :style="`width: ${width}px; height: ${height}px;`">
-        <IconSvg :name="iconName" class="mb-2" />
-        <small class="fw-bold">Image Not Found</small>
+    <div :style="`width:${width}px; height:${height}px;`">
+        <div class="d-flex flex-column justify-content-center border align-items-center rounded w-100 h-100">
+            <IconSvg :name="iconName" class="w-25 h-25" />
+        </div>
     </div>
 </template>
 
@@ -15,7 +15,6 @@ defineProps({
     height: { type: Number, default: 128 },
     iconName: { type: String, default: Icons.imageNotFound }
 })
-
 </script>
 
 <style scoped></style>

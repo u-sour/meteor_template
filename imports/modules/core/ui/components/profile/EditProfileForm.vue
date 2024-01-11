@@ -45,6 +45,7 @@ import { ref, onMounted, toRefs } from 'vue';
 import { useAuthStore } from '../../../stores/auth';
 import { EditProfileForm } from '../../../types/authentication';
 import { updateProfile } from '../../../api/auth/server/methods';
+import uploadFolderPrefix from '../../../utils/upload-folder-prefix';
 import compressor from '../../../utils/compressor';
 import convertFile from '../../../utils/convert-file';
 import ImagePreview from '../ImagePreview.vue';
@@ -96,7 +97,7 @@ const submit = async (form: EditProfileForm) => {
     const profileImageFile = form.profileImageFile![0];
     if (profileImageFile && profileImageFile.name != initData.value.profileImage?.name) {
         // compress file size & convert to base 64
-        const folderPath = `Meteor Template/Profile/${form._id} - ${form.username}`;
+        const folderPath = `${uploadFolderPrefix.profile}/${form._id} - ${form.username}`;
         const blob_file = (await compressor(profileImageFile.file!)) as Blob
         const base64 = await convertFile.toBase64(blob_file)
         // call upload edit method
