@@ -36,7 +36,9 @@ import authLocalStorage from '../../../storage/auth'
 import { SignInForm, RememberMe } from '../../../types/authentication';
 import { useAuthStore } from '../../../stores/auth'
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n()
 const router = useRouter();
 const validations = {
     username: "required|length:4",
@@ -49,18 +51,18 @@ const toggleShowPassword = (node: any, e: any) => {
     node.props.type = node.props.type === 'password' ? 'text' : 'password'
 }
 
-// get rememberme data from local storage
+// get remember me data from local storage
 const authStorage: RememberMe = JSON.parse(authLocalStorage.getRememberMe()!) ?? {}
 
 const submit = async (form: SignInForm) => {
     submitted.value = true
-    signIn(form).then((res) => {
+    signIn(form).then(async (res) => {
         if (res.data) {
             authStore.setUser(res.data.userId)
             submitted.value = false;
             reset('signInForm');
-            router.replace({ name: 'core.auth.admin.dashboard' })
-            notify.success(res.message)
+            await router.replace({ name: 'core.auth.admin.dashboard' })
+            notify.success(t(res.message!))
         }
     }).catch((err) => {
         submitted.value = false;

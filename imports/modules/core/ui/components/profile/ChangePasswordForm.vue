@@ -25,11 +25,13 @@ import { changePasswordForm } from '../../../types/authentication';
 import notify from '../../../utils/notify'
 import FormActions from '../form/FormActions.vue';
 import { changePassword } from '../../../api/auth/client/methods';
+import { useI18n } from 'vue-i18n';
 
 defineProps({
     labelPrefix: { type: String, required: true }
 })
 
+const { t } = useI18n()
 const validations = {
     password: "required|contains_uppercase|length:6"
 }
@@ -45,10 +47,10 @@ const submit = (form: changePasswordForm) => {
     changePassword(form).then((res) => {
         submitted.value = false;
         reset('changePasswordForm');
-        notify.success(res.message)
+        notify.success(t(res.message!))
     }).catch((err) => {
         submitted.value = false;
-        return notify.error(err.message);
+        return notify.error(t(err.reason));
     });
 }
 </script>

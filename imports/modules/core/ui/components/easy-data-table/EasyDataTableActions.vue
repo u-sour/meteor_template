@@ -10,8 +10,8 @@
         </template>
         <template v-else>
             <div>
-                <Vue3Marquee :duration="3" pauseOnHover>
-                    <span class="d-flex align-items-center">
+                <Vue3Marquee :duration="4.5" pauseOnHover>
+                    <span class="d-flex align-items-center fw-bold">
                         <IconSvg class="operation-icon me-2" :name="Icons.info" /> {{ $t(labelMessagePrefix) }}
                     </span>
                 </Vue3Marquee>

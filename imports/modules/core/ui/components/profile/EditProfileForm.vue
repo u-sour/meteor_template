@@ -51,11 +51,13 @@ import convertFile from '../../../utils/convert-file';
 import ImagePreview from '../ImagePreview.vue';
 import notify from '../../../utils/notify';
 import FormActions from '../form/FormActions.vue';
+import { useI18n } from 'vue-i18n';
 
 defineProps({
     labelPrefix: { type: String, required: true }
 })
 
+const { t } = useI18n()
 const authStore = useAuthStore();
 const { userId, username, profile, email, status } = toRefs(authStore);
 const initData = ref<EditProfileForm>({
@@ -119,7 +121,7 @@ const submit = async (form: EditProfileForm) => {
             return notify.error(err.message);
         }
         submitted.value = false;
-        notify.success(res.message)
+        notify.success(t(res.message))
     })
 }
 </script>

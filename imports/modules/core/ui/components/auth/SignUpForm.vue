@@ -45,7 +45,9 @@ import { reset } from '@formkit/core'
 import { SignUpFrom } from '../../../types/authentication';
 import notify from '../../../utils/notify'
 import { insertUser } from '../../../api/auth/server/methods';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const validations = {
     userInfo: "required|length:4",
     email: "required|email",
@@ -67,7 +69,7 @@ const signUp = (form: SignUpFrom) => {
         }
         submitted.value = false;
         reset('signUpForm');
-        notify.success(res.message)
+        notify.success(t(res.message))
     })
 }
 </script>
