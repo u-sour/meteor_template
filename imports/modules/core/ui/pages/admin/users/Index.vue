@@ -8,12 +8,13 @@
         <template #empty-message>
             <EmptyData class="d-flex flex-column align-items-center" :message="`${labelMessagePrefix}.emptyData`" />
         </template>
-        <!-- <template #item-player="{ player, avator, page }">
-            <div class="player-wrapper">
-                <img class="avator" :src="avator" alt="" />
-                <a target="_blank" :href="page">{{ player }}</a>
+        <template #item-profileImage="{ profileImage }">
+            <div class="profileImage-wrapper">
+                <AdvancedImagePreview class="rounded" :public-id="profileImage.publicId" :name="profileImage.name"
+                    :width="dimensions.width" :height="dimensions.height" v-if="profileImage" />
+                <ImageNotFound :width="dimensions.width" :height="dimensions.height" v-else />
             </div>
-        </template>-->
+        </template>
         <template #item-status="{ status }">
             <Status :text="status" :color="status === 'active' ? 'success' : 'danger'" />
         </template>
@@ -30,6 +31,8 @@ import type { Header, Item } from "vue3-easy-data-table";
 import Processing from "../../../components/Processing.vue";
 import EasyDataTableSearch from "../../../components/easy-data-table/EasyDataTableSearch.vue";
 import EasyDataTableActions from '../../../components/easy-data-table/EasyDataTableActions.vue';
+import AdvancedImagePreview from '../../../components/AdvancedImagePreview.vue';
+import ImageNotFound from '../../../components/ImageNotFound.vue';
 import EmptyData from "../../../components/EmptyData.vue";
 import Status from "../../../components/Status.vue";
 import { useRouter } from "vue-router";
@@ -40,15 +43,17 @@ import { Meteor } from "meteor/meteor";
 import { User } from "../../../../types/authentication"
 import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
+const dimensions = { width: 40, height: 40 };
 const labelPrefix = 'core.pages.admin.users.form';
 const labelRowsPerPage = 'core.pageFilter.rowsPerPage';
 const labelMessagePrefix = 'core.messages.other';
-const { t } = useI18n();
 const router = useRouter();
 const searchField = ref(["fullName", "phoneNumber", "status"]);
 const searchValue = ref();
 
 const headers = computed<Header[]>(() => [
+    { text: t(`${labelPrefix}.profileImage`), value: "profileImage" },
     { text: t(`${labelPrefix}.fullName`), value: "fullName" },
     { text: t(`${labelPrefix}.username`), value: "username" },
     { text: t(`${labelPrefix}.email`), value: "email" },
@@ -69,12 +74,12 @@ findUsers.call({ selector: { _id: { $ne: Meteor.userId() } } }, (err: any, res: 
     for (let index = 0; index < res.length; index++) {
         const user = res[index];
         items.value.push({
+            profileImage: user.profile.profileImage,
             _id: user._id,
             fullName: `${user.profile.firstName} ${user.profile.lastName}`,
             username: user.username,
             email: user.emails[0].address,
             phoneNumber: user.profile.phoneNumber,
-            profileImage: user.profile.profileImage,
             status: user.profile.status
         })
     }
@@ -82,9 +87,10 @@ findUsers.call({ selector: { _id: { $ne: Meteor.userId() } } }, (err: any, res: 
 })
 
 const removeItem = async (val: Item) => {
-    const { _id, username, profileImage: { publicId } } = val;
+    const { _id, username } = val;
     // call delete profile image method
-    if (publicId) {
+    if (val.profileImage && val.profileImage.publicId) {
+        const publicId = val.profileImage.publicId
         await Meteor.callAsync('core.admin.upload.remove', { publicId, deleteEmptyFolder: true, folderPath: `${uploadFolderPrefix.profile}/${_id} - ${username}` });
     }
     // call remove user method
@@ -93,7 +99,7 @@ const removeItem = async (val: Item) => {
             notify.error(err.message)
         }
         items.value = items.value.filter((item) => item._id !== _id);
-        notify.success(res.message)
+        notify.success(t(res.message))
     })
 };
 
@@ -102,8 +108,8 @@ const editItem = (val: Item) => router.push({ name: 'core.auth.admin.users.edit'
 </script>
 
 <style scoped>
-.player-wrapper {
-    padding: 5px;
+.profileImage-wrapper {
+    padding: 5px 0;
     display: flex;
     align-items: center;
     justify-items: center;

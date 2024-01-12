@@ -11,7 +11,7 @@ import { userIsInRole, userLoggedIn } from '../../../utils/security'
 // responses
 import { throwError, throwSuccess } from '../../../utils/responses'
 // message prefix
-const messagePrefix = 'core.messages.transaction'
+const messagePrefix = 'core.messages.auth'
 
 // Find
 export const findUsers = new ValidatedMethod({
@@ -52,23 +52,23 @@ export const findOneUser = new ValidatedMethod({
 })
 
 // Find user profile
-export const findUserProfileImage = new ValidatedMethod({
-  name: 'core.admin.findUserProfileImage',
-  mixins: [CallPromiseMixin],
-  validate: new SimpleSchema({
-    _id: String,
-  }).validator(),
-  run({ _id }) {
-    if (Meteor.isServer) {
-      let profileImage = FileImages.findOne({ _id })
-      if (profileImage) {
-        profileImage.url = FileImages.findOne({ _id }).url()
-      }
+// export const findUserProfileImage = new ValidatedMethod({
+//   name: 'core.admin.findUserProfileImage',
+//   mixins: [CallPromiseMixin],
+//   validate: new SimpleSchema({
+//     _id: String,
+//   }).validator(),
+//   run({ _id }) {
+//     if (Meteor.isServer) {
+//       let profileImage = FileImages.findOne({ _id })
+//       if (profileImage) {
+//         profileImage.url = FileImages.findOne({ _id }).url()
+//       }
 
-      return profileImage
-    }
-  },
-})
+//       return profileImage
+//     }
+//   },
+// })
 
 // Insert
 export const insertUser = new ValidatedMethod({
@@ -107,7 +107,7 @@ export const insertUser = new ValidatedMethod({
         return throwSuccess.general({
           status: 201,
           data: { userId },
-          message: `${messagePrefix}.saved`,
+          message: `${messagePrefix}.signedUp`,
         })
       } catch (e) {
         throwError(e)
@@ -162,7 +162,7 @@ export const updateUser = new ValidatedMethod({
         }
 
         return throwSuccess.general({
-          status: 201,
+          status: 204,
           message: `${messagePrefix}.edited`,
         })
       } catch (e) {
@@ -237,7 +237,7 @@ export const removeUser = new ValidatedMethod({
       try {
         Meteor.users.remove({ _id })
         return throwSuccess.general({
-          status: 200,
+          status: 204,
           message: `${messagePrefix}.removed`,
         })
       } catch (e) {

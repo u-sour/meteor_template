@@ -44,8 +44,10 @@ import dynamicOptions from '/imports/modules/core/utils/dynamic-options';
 import { insertUser } from '/imports/modules/core/api/auth/server/methods';
 import { Option } from '/imports/modules/core/types/option';
 import { reset } from '@formkit/vue';
-const labelPrefix = 'core.pages.admin.users.form';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n()
+const labelPrefix = 'core.pages.admin.users.form';
 const validations = {
     userInfo: "required|length:4",
     email: "required|email",
@@ -72,7 +74,7 @@ const submit = async (form: CreateUserForm) => {
         }
         reset('createUserForm');
         submitted.value = false;
-        notify.success(res.message)
+        notify.success(t(res.message))
     })
 }
 </script>

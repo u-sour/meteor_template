@@ -24,7 +24,7 @@ export const changePassword = (form: changePasswordForm) => {
         const { currentPassword, newPassword } = form;
         Accounts.changePassword(currentPassword, newPassword, (error) => {
             if (error) {
-                reject(new Meteor.Error(403, 'Incorrect current password'));
+                reject(new Meteor.Error(400, 'core.messages.user.changePassword.error'));
             }
 
             resolve(throwSuccess.passwordChanged());

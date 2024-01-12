@@ -130,13 +130,22 @@ export default {
   messages: {
     auth: {
       signedIn: "Hey, welcome back! let's start today.",
-      signedUp: 'Congratulation, account is created.',
+      signedUp: 'Congratulation, this account is created.',
+      edited: 'Congratulation, this account is edited.',
+      removed: 'Congratulation, this account is removed.',
+    },
+    user: {
+      updateProfile: 'Congratulation, Profile have been changed.',
+      changePassword: {
+        success: 'Congratulation, this account password is changed.',
+        error: 'Sorry, the current password is incorrect.',
+      },
     },
     transaction: {
-      saved: 'Transaction is saved.',
-      edited: 'Transaction is edited.',
+      saved: 'Congratulation, this transaction is saved.',
+      edited: 'Congratulation, this transaction is edited.',
       confirm: 'Are you sure want to remove this record?',
-      removed: 'Transaction is removed.',
+      removed: 'Congratulation, this transaction is removed.',
     },
     other: {
       loading: 'Loading Data ...',

@@ -46,6 +46,9 @@ import dynamicOptions from '/imports/modules/core/utils/dynamic-options';
 import { Option } from '/imports/modules/core/types/option';
 import { useRoute, useRouter } from 'vue-router';
 import { findOneUser, updateUser } from '/imports/modules/core/api/auth/server/methods';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n()
 const { id } = useRoute().params
 const router = useRouter()
 const initData = ref()
@@ -102,8 +105,8 @@ const submit = async (form: EditUserForm) => {
             return notify.error(err.message);
         }
         submitted.value = false;
+        notify.success(t(res.message))
         router.back()
-        notify.successTimeout(res.message)
     })
 }
 </script>
