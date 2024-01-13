@@ -133,6 +133,8 @@ export default {
       signedUp: 'Congratulation, this account is created.',
       edited: 'Congratulation, this account is edited.',
       removed: 'Congratulation, this account is removed.',
+      401: 'Sorry, you are not authorized to access.',
+      403: 'Sorry, you are not allowed to proceed.',
     },
     user: {
       updateProfile: 'Congratulation, Profile have been changed.',

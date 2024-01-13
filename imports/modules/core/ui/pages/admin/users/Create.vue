@@ -41,10 +41,10 @@ import { CreateUserForm } from '/imports/modules/core/types/user';
 import notify from '/imports/modules/core/utils/notify';
 import staticOptions from '../../../../utils/static-options';
 import dynamicOptions from '/imports/modules/core/utils/dynamic-options';
-import { insertUser } from '/imports/modules/core/api/auth/server/methods';
 import { Option } from '/imports/modules/core/types/option';
 import { reset } from '@formkit/vue';
 import { useI18n } from 'vue-i18n';
+import { Meteor } from 'meteor/meteor';
 
 const { t } = useI18n()
 const labelPrefix = 'core.pages.admin.users.form';
@@ -67,7 +67,7 @@ const toggleShowPassword = (node: any, e: any) => {
 
 const submit = async (form: CreateUserForm) => {
     submitted.value = true;
-    insertUser.call({ user: form }, (err: any, res: any) => {
+    Meteor.call('core.admin.insertUser', { user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;
             return notify.error(err.message);
@@ -76,6 +76,7 @@ const submit = async (form: CreateUserForm) => {
         submitted.value = false;
         notify.success(t(res.message))
     })
+
 }
 </script>
 

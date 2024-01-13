@@ -10,6 +10,7 @@ import { InsertSchema, UpdateSchema, UpdateProfileSchema } from '../schema'
 import { userIsInRole, userLoggedIn } from '../../../utils/security'
 // responses
 import { throwError, throwSuccess } from '../../../utils/responses'
+import rateLimit from '../../../utils/rate-limit'
 // message prefix
 const messagePrefix = 'core.messages.auth'
 
@@ -136,17 +137,15 @@ export const updateUser = new ValidatedMethod({
             $set: {
               username: user.username,
               'emails.0.address': user.email,
-              profile: {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                about: user.about,
-                company: user.company,
-                job: user.job,
-                address: user.address,
-                phoneNumber: user.phoneNumber,
-                roles: user.roles,
-                status: user.status,
-              },
+              'profile.firstName': user.firstName,
+              'profile.lastName': user.lastName,
+              'profile.about': user.about,
+              'profile.company': user.company,
+              'profile.job': user.job,
+              'profile.address': user.address,
+              'profile.phoneNumber': user.phoneNumber,
+              'profile.roles': user.roles,
+              'profile.status': user.status,
             },
           }
         )
@@ -231,10 +230,10 @@ export const removeUser = new ValidatedMethod({
   }).validator(),
   run({ _id }) {
     if (Meteor.isServer) {
-      // Check role
-      userIsInRole(['super'])
-
       try {
+        // Check user in role
+        userIsInRole(['super'])
+        // remove
         Meteor.users.remove({ _id })
         return throwSuccess.general({
           status: 204,
@@ -268,26 +267,13 @@ export const checkUserExisted = new ValidatedMethod({
   },
 })
 
-// check current password with new password
-//export const checkUserCurrentPassword = new ValidatedMethod({
-//     name: 'core.admin.checkUserCurrentPassword',
-//     mixins: [CallPromiseMixin],
-//     validate: new SimpleSchema({
-//         password: String,
-//     }).validator(),
-//     run({ password }) {
-//         if (Meteor.isServer) {
-//             let digest = Package.sha.SHA256(password)
-//             let user = Meteor.user()
-//             let passwordOpts = { digest: digest, algorithm: 'sha-256' }
-//             // try {
-//             let result = Accounts._checkPassword(user, passwordOpts)
-//             // Accounts._checkPassword(user, passwordOpts)
-//             // return true;
-//             return result;
-//             // } catch (e) {
-//             //     throwError(e)
-//             // }
-//         }
-//     },
-// })
+rateLimit({
+  methods: [
+    findUsers,
+    findOneUser,
+    insertUser,
+    updateUser,
+    updateProfile,
+    removeUser,
+  ],
+})

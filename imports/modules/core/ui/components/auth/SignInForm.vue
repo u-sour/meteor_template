@@ -46,7 +46,7 @@ const validations = {
 }
 const authStore = useAuthStore()
 const submitted = ref(false)
-const toggleShowPassword = (node: any, e: any) => {
+const toggleShowPassword = (node: any) => {
     node.props.suffixIcon = node.props.suffixIcon === 'eye' ? 'eyeClosed' : 'eye'
     node.props.type = node.props.type === 'password' ? 'text' : 'password'
 }
