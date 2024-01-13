@@ -15,7 +15,8 @@ export const throwSuccess = {
 }
 
 export const throwError = (error: any) => {
+    const statusCode = error.error || 'transaction-error'
     const newError = error.sanitizedError || error
     const reason = newError.reason || 'Transaction Error'
-    throw new Meteor.Error('transaction-error', reason, newError)
+    throw new Meteor.Error(statusCode, reason, newError)
 }

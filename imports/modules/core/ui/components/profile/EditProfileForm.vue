@@ -44,7 +44,6 @@ import { Meteor } from 'meteor/meteor';
 import { ref, onMounted, toRefs } from 'vue';
 import { useAuthStore } from '../../../stores/auth';
 import { EditProfileForm } from '../../../types/authentication';
-import { updateProfile } from '../../../api/auth/server/methods';
 import uploadFolderPrefix from '../../../utils/upload-folder-prefix';
 import compressor from '../../../utils/compressor';
 import convertFile from '../../../utils/convert-file';
@@ -115,7 +114,7 @@ const submit = async (form: EditProfileForm) => {
     if (!profileImageFile) delete form["profileImage"];
     delete form["profileImageFile"];
     // call update profile method
-    updateProfile.call({ user: form }, (err: any, res: any) => {
+    Meteor.call('core.admin.updateProfile', { user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;
             return notify.error(err.message);

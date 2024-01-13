@@ -44,8 +44,8 @@ import { ref } from 'vue';
 import { reset } from '@formkit/core'
 import { SignUpFrom } from '../../../types/authentication';
 import notify from '../../../utils/notify'
-import { insertUser } from '../../../api/auth/server/methods';
 import { useI18n } from 'vue-i18n';
+import { Meteor } from 'meteor/meteor';
 
 const { t } = useI18n();
 const validations = {
@@ -54,7 +54,7 @@ const validations = {
     password: "required|contains_uppercase|length:6"
 }
 const submitted = ref(false)
-const toggleShowPassword = (node: any, e: any) => {
+const toggleShowPassword = (node: any) => {
     node.props.suffixIcon = node.props.suffixIcon === 'eye' ? 'eyeClosed' : 'eye'
     node.props.type = node.props.type === 'password' ? 'text' : 'password'
 }
@@ -62,7 +62,7 @@ const signUp = (form: SignUpFrom) => {
     form.status = 'inactive';
     form.roles = ['guest'];
     submitted.value = true;
-    insertUser.call({ user: form }, (err: any, res: any) => {
+    Meteor.call('core.admin.insertUser', { user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;
             return notify.error(err.message);

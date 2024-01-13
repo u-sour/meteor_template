@@ -45,8 +45,8 @@ import staticOptions from '../../../../utils/static-options';
 import dynamicOptions from '/imports/modules/core/utils/dynamic-options';
 import { Option } from '/imports/modules/core/types/option';
 import { useRoute, useRouter } from 'vue-router';
-import { findOneUser, updateUser } from '/imports/modules/core/api/auth/server/methods';
 import { useI18n } from 'vue-i18n';
+import { Meteor } from 'meteor/meteor';
 
 const { t } = useI18n()
 const { id } = useRoute().params
@@ -67,7 +67,7 @@ onMounted(async () => {
 })
 
 // find one user
-findOneUser.call({ _id: id }, (err: any, res: any) => {
+Meteor.call('core.admin.findOneUser', { _id: id }, (err: any, res: any) => {
     if (err) {
         return notify.error(err.message);
     }
@@ -99,7 +99,7 @@ const submit = async (form: EditUserForm) => {
     // omit
     delete form["changePassword"];
     // call update user method
-    updateUser.call({ user: form }, (err: any, res: any) => {
+    Meteor.call('core.admin.updateUser', { user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;
             return notify.error(err.message);
