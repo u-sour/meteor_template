@@ -9,13 +9,6 @@
         <template #empty-message>
             <EmptyData class="d-flex flex-column align-items-center" :message="`${labelMessagePrefix}.emptyData`" />
         </template>
-        <template #item-profileImage="{ profileImage }">
-            <div class="profileImage-wrapper">
-                <AdvancedImagePreview class="rounded" :public-id="profileImage.publicId" :name="profileImage.name"
-                    :width="dimensions.width" :height="dimensions.height" v-if="profileImage" />
-                <ImageNotFound :width="dimensions.width" :height="dimensions.height" v-else />
-            </div>
-        </template>
         <template #item-status="{ status }">
             <Status :text="status" :color="status === 'active' ? 'success' : 'danger'" />
         </template>
@@ -32,8 +25,6 @@ import type { Header, Item } from "vue3-easy-data-table";
 import Processing from "../../../components/Processing.vue";
 import EasyDataTableSearch from "../../../components/easy-data-table/EasyDataTableSearch.vue";
 import EasyDataTableActions from '../../../components/easy-data-table/EasyDataTableActions.vue';
-import AdvancedImagePreview from '../../../components/AdvancedImagePreview.vue';
-import ImageNotFound from '../../../components/ImageNotFound.vue';
 import EmptyData from "../../../components/EmptyData.vue";
 import Status from "../../../components/Status.vue";
 import { useRouter } from "vue-router";
@@ -44,21 +35,16 @@ import { User } from "../../../../types/authentication"
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const dimensions = { width: 40, height: 40 };
-const labelPrefix = 'core.pages.admin.users.form';
+const labelPrefix = 'core.pages.admin.roles.form';
 const labelRowsPerPage = 'core.pageFilter.rowsPerPage';
 const labelMessagePrefix = 'core.messages.other';
 const router = useRouter();
-const searchField = ref(["fullName", "phoneNumber", "status"]);
+const searchField = ref(["_id"]);
 const searchValue = ref();
 
 const headers = computed<Header[]>(() => [
-    { text: t(`${labelPrefix}.profileImage`), value: "profileImage" },
-    { text: t(`${labelPrefix}.fullName`), value: "fullName" },
-    { text: t(`${labelPrefix}.username`), value: "username" },
-    { text: t(`${labelPrefix}.email`), value: "email" },
-    { text: t(`${labelPrefix}.phoneNumber`), value: "phoneNumber" },
-    { text: t(`${labelPrefix}.status`), value: "status" },
+    { text: t(`${labelPrefix}._id`), value: "_id" },
+    { text: t(`${labelPrefix}.children`), value: "children" },
     { text: t(`${labelPrefix}.operation`), value: "operation", width: 120 },
 ]);
 
@@ -66,21 +52,16 @@ const items = ref<Item[]>([]);
 const loading = ref(true);
 
 // load data from server
-Meteor.call('core.admin.findUsers', { selector: { _id: { $ne: Meteor.userId() } } }, (err: any, res: [User]) => {
+Meteor.call('core.admin.findRoles', {}, {}, (err: any, res: any) => {
     if (err) {
         return notify.error(err.message);
     }
     // prepare data
-    for (let index = 0; index < res.length; index++) {
-        const user = res[index];
+    for (let index = 0; index < res.data.length; index++) {
+        const role = res.data[index];
         items.value.push({
-            profileImage: user.profile.profileImage,
-            _id: user._id,
-            fullName: `${user.profile.firstName} ${user.profile.lastName}`,
-            username: user.username,
-            email: user.emails[0].address,
-            phoneNumber: user.profile.phoneNumber,
-            status: user.profile.status
+            _id: role._id,
+            children: role.children
         })
     }
     loading.value = false;
@@ -107,11 +88,4 @@ const editItem = (val: Item) => router.push({ name: 'core.auth.admin.users.edit'
 
 </script>
 
-<style scoped lang="scss">
-.profileImage-wrapper {
-    padding: 5px 0;
-    display: flex;
-    align-items: center;
-    justify-items: center;
-}
-</style>
+<style scoped lang="scss"></style>

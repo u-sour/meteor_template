@@ -1,7 +1,1 @@
-[
-    "super",
-    "admin",
-    "cashier",
-    "reporter",
-    "guest"
-]
+["super", "admin", "cashier", "reporter", "guest"]

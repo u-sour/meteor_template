@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { EJSON } from 'meteor/ejson'
 import { Roles } from 'meteor/alanning:roles'
+import ChildRoles from '../../api/child-roles/collection'
 
 Meteor.startup(function () {
   // Roles
@@ -8,6 +9,13 @@ Meteor.startup(function () {
     const data = EJSON.parse(Assets.getText('roles.json'))
     data.forEach((role) => {
       Roles.createRole(role)
+    })
+  }
+  // Child Roles
+  if (ChildRoles.find().count() === 0) {
+    const data = EJSON.parse(Assets.getText('child-roles.json'))
+    data.forEach((child_role) => {
+      ChildRoles.insert(child_role)
     })
   }
   // Super User

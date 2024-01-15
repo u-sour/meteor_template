@@ -2,6 +2,7 @@ import { Accounts } from 'meteor/accounts-base'
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import rateLimit from '../../../utils/rate-limit'
 import SimpleSchema from 'simpl-schema'
 
 // schema
@@ -10,7 +11,6 @@ import { InsertSchema, UpdateSchema, UpdateProfileSchema } from '../schema'
 import { userIsInRole, userLoggedIn } from '../../../utils/security'
 // responses
 import { throwError, throwSuccess } from '../../../utils/responses'
-import rateLimit from '../../../utils/rate-limit'
 // message prefix
 const messagePrefix = 'core.messages.auth'
 
@@ -52,25 +52,6 @@ export const findOneUser = new ValidatedMethod({
   },
 })
 
-// Find user profile
-// export const findUserProfileImage = new ValidatedMethod({
-//   name: 'core.admin.findUserProfileImage',
-//   mixins: [CallPromiseMixin],
-//   validate: new SimpleSchema({
-//     _id: String,
-//   }).validator(),
-//   run({ _id }) {
-//     if (Meteor.isServer) {
-//       let profileImage = FileImages.findOne({ _id })
-//       if (profileImage) {
-//         profileImage.url = FileImages.findOne({ _id }).url()
-//       }
-
-//       return profileImage
-//     }
-//   },
-// })
-
 // Insert
 export const insertUser = new ValidatedMethod({
   name: 'core.admin.insertUser',
@@ -80,11 +61,8 @@ export const insertUser = new ValidatedMethod({
   }).validator(),
   run({ user }) {
     if (Meteor.isServer) {
-      // Check role
-      // userIsInRole(['super', 'admin'])
-
       try {
-        // Add new user
+        // insert
         const userId = Accounts.createUser({
           username: user.username,
           email: user.email,
@@ -102,7 +80,7 @@ export const insertUser = new ValidatedMethod({
           },
         })
 
-        // Add roles
+        // add roles
         Roles.addUsersToRoles(userId, user.roles)
 
         return throwSuccess.general({
@@ -126,11 +104,11 @@ export const updateUser = new ValidatedMethod({
   }).validator(),
   run({ user }) {
     if (Meteor.isServer) {
-      // Check role
+      // check authorization
       userIsInRole(['super', 'admin'])
 
       try {
-        // Update user
+        // update user
         Meteor.users.update(
           { _id: user._id },
           {
@@ -149,10 +127,10 @@ export const updateUser = new ValidatedMethod({
             },
           }
         )
-        // Update roles
+        // update roles
         Roles.setUserRoles(user._id, user.roles)
 
-        // Update password
+        // update password
         if (user.password) {
           Accounts.setPassword(user._id, user.password, { logout: false })
           if (user._id === Meteor.userId()) {
@@ -181,10 +159,10 @@ export const updateProfile = new ValidatedMethod({
   async run({ user }) {
     if (Meteor.isServer) {
       try {
-        // Check authorization
+        // check authentication
         userLoggedIn()
 
-        // Update profile
+        // update
         Meteor.users.update(
           { _id: user._id },
           {
@@ -231,7 +209,7 @@ export const removeUser = new ValidatedMethod({
   run({ _id }) {
     if (Meteor.isServer) {
       try {
-        // Check user in role
+        // check authorization
         userIsInRole(['super'])
         // remove
         Meteor.users.remove({ _id })

@@ -23,6 +23,7 @@ export const userIsInRole = (roles) => {
   }
   let result = intersection(currentUserRoles, userRoles)
 
+  // return result.length ? true : false
   if (result.length) {
     return true
   }

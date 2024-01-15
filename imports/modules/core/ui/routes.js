@@ -2,6 +2,18 @@ import Icons from '../utils/icons'
 const labelAdminPrefix = 'core.pages.admin'
 const labelPageTypesPrefix = 'core.pageTypes'
 
+// breadcrumb parent
+const childRoles = [
+  {
+    title: `${labelAdminPrefix}.settings.title`,
+    route: 'core.auth.admin.settings',
+  },
+  {
+    title: `${labelAdminPrefix}.settings.childRoles.title`,
+    route: 'core.auth.admin.settings.child-roles',
+  },
+]
+
 const routes = [
   {
     path: '/core',
@@ -45,10 +57,12 @@ const routes = [
               isParent: true,
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.index`,
-                parent: {
-                  title: `${labelAdminPrefix}.dashboard.title`,
-                  route: 'core.auth.admin.dashboard',
-                },
+                parent: [
+                  {
+                    title: `${labelAdminPrefix}.dashboard.title`,
+                    route: 'core.auth.admin.dashboard',
+                  },
+                ],
               },
             },
           },
@@ -63,10 +77,12 @@ const routes = [
               isParent: true,
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.index`,
-                parent: {
-                  title: `${labelAdminPrefix}.profile.title`,
-                  route: 'core.auth.admin.profile',
-                },
+                parent: [
+                  {
+                    title: `${labelAdminPrefix}.profile.title`,
+                    route: 'core.auth.admin.profile',
+                  },
+                ],
               },
             },
           },
@@ -84,10 +100,12 @@ const routes = [
               },
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.index`,
-                parent: {
-                  title: `${labelAdminPrefix}.users.title`,
-                  route: 'core.auth.admin.users',
-                },
+                parent: [
+                  {
+                    title: `${labelAdminPrefix}.users.title`,
+                    route: 'core.auth.admin.users',
+                  },
+                ],
               },
             },
           },
@@ -100,10 +118,12 @@ const routes = [
               iconName: Icons.users,
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.create`,
-                parent: {
-                  title: `${labelAdminPrefix}.users.title`,
-                  route: 'core.auth.admin.users',
-                },
+                parent: [
+                  {
+                    title: `${labelAdminPrefix}.users.title`,
+                    route: 'core.auth.admin.users',
+                  },
+                ],
               },
             },
           },
@@ -116,10 +136,71 @@ const routes = [
               iconName: Icons.users,
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.edit`,
-                parent: {
-                  title: `${labelAdminPrefix}.users.title`,
-                  route: 'core.auth.admin.users',
-                },
+                parent: [
+                  {
+                    title: `${labelAdminPrefix}.users.title`,
+                    route: 'core.auth.admin.users',
+                  },
+                ],
+              },
+            },
+          },
+          // Roles
+          {
+            path: '/core/auth/admin/roles',
+            name: 'core.auth.admin.roles',
+            component: () => import('./pages/admin/roles/Index.vue'),
+            meta: {
+              title: `${labelAdminPrefix}.roles.title`,
+              iconName: Icons.roles,
+              isParent: true,
+              create: {
+                route: 'core.auth.admin.roles.create',
+              },
+              breadcrumb: {
+                title: `${labelPageTypesPrefix}.index`,
+                parent: [
+                  {
+                    title: `${labelAdminPrefix}.roles.title`,
+                    route: 'core.auth.admin.roles',
+                  },
+                ],
+              },
+            },
+          },
+          {
+            path: '/core/auth/admin/roles/create',
+            name: 'core.auth.admin.roles.create',
+            component: () => import('./pages/admin/roles/Create.vue'),
+            meta: {
+              title: `${labelAdminPrefix}.roles.title`,
+              iconName: Icons.roles,
+              breadcrumb: {
+                title: `${labelPageTypesPrefix}.create`,
+                parent: [
+                  {
+                    title: `${labelAdminPrefix}.roles.title`,
+                    route: 'core.auth.admin.roles',
+                  },
+                ],
+              },
+            },
+          },
+          {
+            path: '/core/auth/admin/roles/edit/:id',
+            name: 'core.auth.admin.roles.edit',
+            component: () => import('./pages/admin/roles/Edit.vue'),
+            meta: {
+              title: `${labelAdminPrefix}.roles.title`,
+              iconName: Icons.users,
+              breadcrumb: {
+                title: `${labelPageTypesPrefix}.edit`,
+                parent: [
+                  {
+                    title: `${labelAdminPrefix}.roles.title`,
+                    route: 'core.auth.admin.roles',
+                  },
+                ],
               },
             },
           },
@@ -127,17 +208,63 @@ const routes = [
           {
             path: '/core/auth/admin/settings',
             name: 'core.auth.admin.settings',
-            component: () => import('./pages/admin/Settings.vue'),
+            component: () => import('./pages/admin/settings/Index.vue'),
             meta: {
               title: `${labelAdminPrefix}.settings.title`,
               iconName: Icons.settings,
               isParent: true,
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.index`,
-                parent: {
-                  title: `${labelAdminPrefix}.settings.title`,
-                  route: 'core.auth.admin.settings',
-                },
+                parent: [
+                  {
+                    title: `${labelAdminPrefix}.settings.title`,
+                    route: 'core.auth.admin.settings',
+                  },
+                ],
+              },
+            },
+          },
+          // Child Roles
+          {
+            path: '/core/auth/admin/settings/child-roles',
+            name: 'core.auth.admin.settings.child-roles',
+            component: () => import('./pages/admin/child-roles/Index.vue'),
+            meta: {
+              title: `${labelAdminPrefix}.settings.childRoles.title`,
+              iconName: Icons.childRole,
+              isParent: true,
+              create: {
+                route: 'core.auth.admin.settings.child-roles.create',
+              },
+              breadcrumb: {
+                title: `${labelPageTypesPrefix}.index`,
+                parent: childRoles,
+              },
+            },
+          },
+          {
+            path: '/core/auth/admin/settings/child-roles/create',
+            name: 'core.auth.admin.settings.child-roles.create',
+            component: () => import('./pages/admin/child-roles/Create.vue'),
+            meta: {
+              title: `${labelAdminPrefix}.settings.childRoles.title`,
+              iconName: Icons.childRole,
+              breadcrumb: {
+                title: `${labelPageTypesPrefix}.create`,
+                parent: childRoles,
+              },
+            },
+          },
+          {
+            path: '/core/auth/admin/settings/child-roles/edit/:id',
+            name: 'core.auth.admin.settings.child-roles.edit',
+            component: () => import('./pages/admin/child-roles/Edit.vue'),
+            meta: {
+              title: `${labelAdminPrefix}.settings.childRoles.title`,
+              iconName: Icons.childRole,
+              breadcrumb: {
+                title: `${labelPageTypesPrefix}.edit`,
+                parent: childRoles,
               },
             },
           },
@@ -151,4 +278,5 @@ const routes = [
     ],
   },
 ]
+
 export default routes

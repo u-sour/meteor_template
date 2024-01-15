@@ -1,7 +1,8 @@
 <template>
     <div class="col">
-        <FormKit type="form" id="createUserForm" @submit="submit" #default="{ value }" :actions="false"
+        <FormKit type="form" id="editUserForm" v-model="initData" @submit="submit" #default="{ value }" :actions="false"
             :disabled="submitted">
+            <FormKit type="hidden" name="_id" validation="required" />
             <div class="row">
                 <div class="col-6">
                     <FormKit name="firstName" :label="$t(`${labelPrefix}.firstName`)" :validation="validations.userInfo" />
@@ -21,9 +22,10 @@
             <FormKit name="address" :label="$t(`${labelPrefix}.address`)" />
             <FormKit name="phoneNumber" :label="$t(`${labelPrefix}.phoneNumber`)" validation="required" />
             <FormKit name="email" :label="$t(`${labelPrefix}.email`)" :validation="validations.email" />
-            <FormKit type="password" name="password" :label="$t('core.pages.auth.signUp.form.password')"
-                prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
-                :validation="validations.password" @suffix-icon-click="toggleShowPassword" />
+            <FormKit name="changePassword" type="checkbox" :label="$t(`${labelPrefix}.edit.changePassword`)" />
+            <FormKit type="password" name="password" :label="$t(`${labelPrefix}.edit.newPassword`)" prefix-icon="password"
+                suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500" :validation="validations.password"
+                @suffix-icon-click="toggleShowPassword" v-if="value.changePassword" />
             <FormKit type="checkbox" name="roles" :label="$t(`${labelPrefix}.roles.label`)" :options="roleOptions"
                 decorator-icon="check" :help="$t(`${labelPrefix}.roles.help`)" validation="required|min:1" />
             <FormKit type="select" name="status" :label="$t(`${labelPrefix}.status`)" :options="staticOptions.status"
@@ -37,16 +39,19 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import FormActions from '../../../components/form/FormActions.vue';
-import { CreateUserForm } from '/imports/modules/core/types/user';
+import { EditUserForm } from '/imports/modules/core/types/user';
 import notify from '/imports/modules/core/utils/notify';
 import staticOptions from '../../../../utils/static-options';
 import dynamicOptions from '/imports/modules/core/utils/dynamic-options';
 import { Option } from '/imports/modules/core/types/option';
-import { reset } from '@formkit/vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { Meteor } from 'meteor/meteor';
 
 const { t } = useI18n()
+const { id } = useRoute().params
+const router = useRouter()
+const initData = ref()
 const labelPrefix = 'core.pages.admin.users.form';
 const validations = {
     userInfo: "required|length:4",
@@ -57,26 +62,52 @@ const roleOptions = ref<Option[]>([])
 const submitted = ref(false)
 
 onMounted(async () => {
+    // set role options
     roleOptions.value = await dynamicOptions.roles()
 })
 
-const toggleShowPassword = (node: any) => {
+// find one user
+Meteor.call('core.admin.findOneUser', { _id: id }, (err: any, res: any) => {
+    if (err) {
+        return notify.error(err.message);
+    }
+    const { _id, username, emails, profile: { firstName, lastName, about, company, job, address, phoneNumber, roles, status } } = res.data
+    initData.value = {
+        _id,
+        firstName,
+        lastName,
+        about,
+        username,
+        company,
+        job,
+        address,
+        phoneNumber,
+        email: emails[0].address,
+        changePassword: false,
+        roles,
+        status
+    }
+})
+
+const toggleShowPassword = (node: any, e: any) => {
     node.props.suffixIcon = node.props.suffixIcon === 'eye' ? 'eyeClosed' : 'eye'
     node.props.type = node.props.type === 'password' ? 'text' : 'password'
 }
 
-const submit = async (form: CreateUserForm) => {
+const submit = async (form: EditUserForm) => {
     submitted.value = true;
-    Meteor.call('core.admin.insertUser', { user: form }, (err: any, res: any) => {
+    // omit
+    delete form["changePassword"];
+    // call update user method
+    Meteor.call('core.admin.updateUser', { user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;
             return notify.error(err.message);
         }
-        reset('createUserForm');
         submitted.value = false;
         notify.success(t(res.message))
+        router.back()
     })
-
 }
 </script>
 

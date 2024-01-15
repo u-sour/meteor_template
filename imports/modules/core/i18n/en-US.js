@@ -108,8 +108,26 @@ export default {
           operation: 'Operation', // EDT
         },
       },
+      roles: {
+        title: 'Roles',
+        form: {
+          _id: 'ID', // EDT
+          name: 'Name',
+          children: 'Children',
+          operation: 'Operation', // EDT
+        },
+      },
       settings: {
         title: 'Settings',
+        childRoles: {
+          title: 'Child Roles',
+          form: {
+            _id: 'ID', // EDT
+            name: 'Name',
+            status: 'Status',
+            operation: 'Operation', // EDT
+          },
+        },
       },
     },
     notFound: {
