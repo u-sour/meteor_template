@@ -6,7 +6,8 @@
         <hr>
         <ul class="custom-nav nav nav-pills flex-column mb-auto">
             <SidebarLink v-for="route in adminRoutes" :key="route.name" :to-route-name="route.name"
-                :icon-name="route.meta.iconName"><span class="ms-2">{{ $t(route.meta.title) }}</span></SidebarLink>
+                :icon-name="route.meta.iconName"><span class="ms-2">{{ $t(route.meta.title) }}</span>
+            </SidebarLink>
             <!-- <li class="nav-item mb-1">
                     <a href="#" class="">
                         <i class="fa-solid fa-bell"></i>
@@ -37,7 +38,7 @@ defineProps({
     brand: { type: String, default: 'meteor template' }
 })
 
-const adminRoutes = routes[0].children[1].children.filter((r) => r.meta.isParent && r.name != "core.auth.admin.profile");
+const adminRoutes = routes[0].children[1].children.filter((r) => r.meta.isParent && r.name != "core.auth.admin.profile" && r.name != "core.auth.admin.settings.child-roles");
 </script>
 
 <style>

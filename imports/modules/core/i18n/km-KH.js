@@ -108,8 +108,26 @@ export default {
           operation: 'ប្រតិបត្តិការ', // EDT
         },
       },
+      roles: {
+        title: 'តួនាទី',
+        form: {
+          _id: 'លេខសម្គាល់',
+          name: 'ឈ្មោះ​',
+          children: 'តួនាទីតូចៗ',
+          operation: 'ប្រតិបត្តិការ', // EDT
+        },
+      },
       settings: {
         title: 'ការកំណត់',
+        childRoles: {
+          title: 'តួនាទីតូចៗ',
+          form: {
+            _id: 'លេខសម្គាល់', // EDT
+            name: 'ឈ្មោះ​',
+            status: 'ស្ថានភាព',
+            operation: 'ប្រតិបត្តិការ', // EDT
+          },
+        },
       },
     },
     notFound: {

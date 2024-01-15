@@ -89,7 +89,7 @@ Meteor.call('core.admin.findOneUser', { _id: id }, (err: any, res: any) => {
     }
 })
 
-const toggleShowPassword = (node: any, e: any) => {
+const toggleShowPassword = (node: any) => {
     node.props.suffixIcon = node.props.suffixIcon === 'eye' ? 'eyeClosed' : 'eye'
     node.props.type = node.props.type === 'password' ? 'text' : 'password'
 }
@@ -105,8 +105,8 @@ const submit = async (form: EditUserForm) => {
             return notify.error(err.message);
         }
         submitted.value = false;
-        notify.success(t(res.message))
-        router.back()
+        notify.success(t(res.message));
+        router.back();
     })
 }
 </script>

@@ -11,8 +11,8 @@ import Vue3EasyDataTable from 'vue3-easy-data-table'
 import 'bootstrap'
 import '/imports/styles/main.scss'
 import '@formkit/themes/genesis'
-import 'vue3-toastify/dist/index.css';
-import 'vue3-easy-data-table/dist/style.css';
+import 'vue3-toastify/dist/index.css'
+import 'vue3-easy-data-table/dist/style.css'
 import App from './App.vue'
 import { router } from './router'
 
@@ -25,7 +25,7 @@ Meteor.startup(() => {
   app.use(i18nConfig)
   app.use(VueProgressBar, vue3ProgressbarConfig)
   app.use(plugin, defaultConfig(fkConfig))
-  app.component('EasyDataTable', Vue3EasyDataTable);
+  app.component('EasyDataTable', Vue3EasyDataTable)
   app.mount('#app')
 
   const progress = app.config.globalProperties.$Progress
@@ -38,11 +38,16 @@ Meteor.startup(() => {
     if (to.meta.requiresAuth && !Meteor.userId()) {
       // (not allow user enter to route user page without login)
       // if route user want to enter require auth & user doesn't login it will redirect to login page
-      return next({ name: 'core.auth.signIn', query: { redirect: to.fullPath } })
+      return next({
+        name: 'core.auth.signIn',
+        query: { redirect: to.fullPath },
+      })
     } else if (to.meta.requiresGuest && Meteor.userId()) {
       // (not allow user enter to route sing in or sing up page after login)
       // else if route user want to enter require guest & user already login login it will go to home page
       return next({ name: 'core.auth.admin.dashboard' })
+      // } else if (to.meta.roles && !userIsInRole(to.meta.roles)) {
+      //   return next({ name: 'core.auth.admin.dashboard' })
     } else {
       return next()
     }

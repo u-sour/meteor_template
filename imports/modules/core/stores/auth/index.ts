@@ -7,7 +7,6 @@ import { Meteor } from "meteor/meteor";
 export const useAuthStore = defineStore('auth', () => {
     //state
     const _user = ref<User>();
-    // const profileImageFile = ref();
     //getter
     const user = computed(() => _user.value);
     const userId = computed(() => _user.value!._id);
