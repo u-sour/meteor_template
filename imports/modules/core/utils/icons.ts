@@ -3,8 +3,8 @@ const Icons = {
     dashboard: 'SolarWidget5Linear',
     profile: 'SolarSmileCircleLinear',
     users: 'SolarSmileCircleLinear',
-    roles: 'SolarHandStarsLinear',
-    childRole: 'SolarStarFallLinear',
+    roleGroups: 'SolarHandStarsLinear',
+    roles: 'SolarStarFallLinear',
     settings: 'SolarSettingsLinear',
     // others
     search: 'SolarMagniferLinear',

@@ -1,29 +1,15 @@
 import { Meteor } from 'meteor/meteor'
 import { EJSON } from 'meteor/ejson'
-import { Roles } from 'meteor/alanning:roles'
-import ChildRoles from '../../api/child-roles/collection'
+import RoleGroups from '../../api/authorization/groups/collection'
+import Roles from '../../api/authorization/roles/collection'
 
 Meteor.startup(function () {
-  // Roles
-  if (Roles.getAllRoles().count() === 0) {
-    const data = EJSON.parse(Assets.getText('roles.json'))
-    data.forEach((role) => {
-      Roles.createRole(role)
-    })
-  }
-  // Child Roles
-  if (ChildRoles.find().count() === 0) {
-    const data = EJSON.parse(Assets.getText('child-roles.json'))
-    data.forEach((child_role) => {
-      ChildRoles.insert(child_role)
-    })
-  }
   // Super User
-  if (!Meteor.users.findOne({ name: 'super' })) {
+  const superUserDoc = Meteor.users.findOne({ username: 'super' })
+  if (!superUserDoc) {
     const data = EJSON.parse(Assets.getText('super.json'))
     data.forEach(({ username, email, password, profile }) => {
       const userExists = Accounts.findUserByUsername(username)
-
       if (!userExists) {
         const userId = Accounts.createUser({
           username,
@@ -31,8 +17,47 @@ Meteor.startup(function () {
           password,
           profile,
         })
-        Roles.addUsersToRoles(userId, roles)
+
+        // Role Groups
+        if (RoleGroups.find().count() === 0) {
+          let roleGroups = EJSON.parse(Assets.getText('group-roles.json'))
+          roleGroups.forEach((rg) => {
+            rg.createdAt = new Date()
+            rg.createdBy = userId
+          })
+          RoleGroups.rawCollection().insertMany(roleGroups)
+        }
+
+        // Roles
+        if (Roles.find().count() === 0) {
+          let roles = EJSON.parse(Assets.getText('roles.json'))
+          roles.forEach((r) => {
+            r.createdAt = new Date()
+            r.createdBy = userId
+          })
+          Roles.rawCollection().insertMany(roles)
+        }
       }
     })
+  } else {
+    // Role Groups
+    if (RoleGroups.find().count() === 0) {
+      let roleGroups = EJSON.parse(Assets.getText('group-roles.json'))
+      roleGroups.forEach((rg) => {
+        rg.createdAt = new Date()
+        rg.createdBy = superUserDoc._id
+      })
+      RoleGroups.rawCollection().insertMany(roleGroups)
+    }
+
+    // Roles
+    if (Roles.find().count() === 0) {
+      let roles = EJSON.parse(Assets.getText('roles.json'))
+      roles.forEach((r) => {
+        r.createdAt = new Date()
+        r.createdBy = superUserDoc._id
+      })
+      Roles.rawCollection().insertMany(roles)
+    }
   }
 })

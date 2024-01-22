@@ -1,5 +1,5 @@
 <template>
-    <span :class="`badge ${mode} text-bg-${color}`">{{ text }}</span>
+    <span :class="`badge text-bg-${color}`">{{ text }}</span>
 </template>
 
 <script setup lang="ts">
@@ -8,16 +8,15 @@ defineProps({
     color: {
         type: String,
         validator: (value: string) => {
-            const colors = ['success', 'warning', 'danger']
+            const colors = ['success', 'warning', 'danger', 'light']
             const val = colors.includes(value);
             if (!val) {
                 console.warn(`Prop color can only have a value of ${colors}`);
             }
             return val
         },
-        required: true
-    },
-    mode: { type: String }
+        default: 'light'
+    }
 })
 </script>
 

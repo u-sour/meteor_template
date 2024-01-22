@@ -60,7 +60,8 @@ const toggleShowPassword = (node: any) => {
 }
 const signUp = (form: SignUpFrom) => {
     form.status = 'inactive';
-    form.roles = ['guest'];
+    form.roleGroups = '005';
+    form.roles = ['01'];
     submitted.value = true;
     Meteor.call('core.admin.insertUser', { user: form }, (err: any, res: any) => {
         if (err) {

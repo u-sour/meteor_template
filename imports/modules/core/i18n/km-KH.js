@@ -100,26 +100,31 @@ export default {
             newPassword: 'ពាក្យសម្ងាត់​ថ្មី',
           },
           email: 'អ៊ីមែល',
-          roles: {
-            label: 'តួនាទី',
-            help: 'ជ្រើសរើសតួនាទីអ្នកប្រើប្រាស់',
+          roleGroup: {
+            label: 'ក្រុមតួនាទី',
+            help: 'ជ្រើសរើសក្រុមតួនាទីមួយ',
           },
+          roles: 'តួនាទីតូចៗ',
           status: 'ស្ថានភាព', // EDT
           operation: 'ប្រតិបត្តិការ', // EDT
         },
       },
-      roles: {
-        title: 'តួនាទី',
+      roleGroups: {
+        title: 'ក្រុមតួនាទី',
         form: {
           _id: 'លេខសម្គាល់',
           name: 'ឈ្មោះ​',
-          children: 'តួនាទីតូចៗ',
+          roles: {
+            label: 'តួនាទីតូចៗ',
+            help: 'ជ្រើសរើសតួនាទីតូចៗ',
+          },
+          status: 'ស្ថានភាព',
           operation: 'ប្រតិបត្តិការ', // EDT
         },
       },
       settings: {
         title: 'ការកំណត់',
-        childRoles: {
+        roles: {
           title: 'តួនាទីតូចៗ',
           form: {
             _id: 'លេខសម្គាល់', // EDT

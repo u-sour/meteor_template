@@ -28,23 +28,21 @@ import EasyDataTableActions from '../../../components/easy-data-table/EasyDataTa
 import EmptyData from "../../../components/EmptyData.vue";
 import Status from "../../../components/Status.vue";
 import { useRouter } from "vue-router";
-import uploadFolderPrefix from "/imports/modules/core/utils/upload-folder-prefix";
 import notify from "/imports/modules/core/utils/notify";
 import { Meteor } from "meteor/meteor";
-import { User } from "../../../../types/authentication"
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const labelPrefix = 'core.pages.admin.roles.form';
+const labelPrefix = 'core.pages.admin.settings.roles.form';
 const labelRowsPerPage = 'core.pageFilter.rowsPerPage';
 const labelMessagePrefix = 'core.messages.other';
 const router = useRouter();
-const searchField = ref(["_id"]);
+const searchField = ref(["name", "status"]);
 const searchValue = ref();
 
 const headers = computed<Header[]>(() => [
-    { text: t(`${labelPrefix}._id`), value: "_id" },
-    { text: t(`${labelPrefix}.children`), value: "children" },
+    { text: t(`${labelPrefix}.name`), value: "name" },
+    { text: t(`${labelPrefix}.status`), value: "status" },
     { text: t(`${labelPrefix}.operation`), value: "operation", width: 120 },
 ]);
 
@@ -61,30 +59,26 @@ Meteor.call('core.admin.findRoles', {}, {}, (err: any, res: any) => {
         const role = res.data[index];
         items.value.push({
             _id: role._id,
-            children: role.children
+            name: role.name,
+            status: role.status
         })
     }
     loading.value = false;
 })
 
 const removeItem = (val: Item) => {
-    const { _id, username } = val;
-    // call remove user method
-    Meteor.call('core.admin.removeUser', { _id }, async (err: any, res: any) => {
+    const { _id } = val;
+    // call remove role method
+    Meteor.call('core.admin.removeRole', { _id }, async (err: any, res: any) => {
         if (err) {
             return notify.error(t(err.reason))
-        }
-        // call delete profile image method
-        if (val.profileImage && val.profileImage.publicId) {
-            const publicId = val.profileImage.publicId
-            await Meteor.callAsync('core.admin.upload.remove', { publicId, deleteEmptyFolder: true, folderPath: `${uploadFolderPrefix.profile}/${_id} - ${username}` });
         }
         items.value = items.value.filter((item) => item._id !== _id);
         notify.success(t(res.message))
     })
 };
 
-const editItem = (val: Item) => router.push({ name: 'core.auth.admin.users.edit', params: { id: val._id } });
+const editItem = (val: Item) => router.push({ name: 'core.auth.admin.settings.roles.edit', params: { id: val._id } });
 
 </script>
 

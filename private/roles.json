@@ -1,1 +1,6 @@
-["super", "admin", "cashier", "reporter", "guest"]
+[
+  { "_id": "01", "name": "read", "status": "active" },
+  { "_id": "02", "name": "create", "status": "active" },
+  { "_id": "03", "name": "edit", "status": "active" },
+  { "_id": "04", "name": "remove", "status": "active" }
+]

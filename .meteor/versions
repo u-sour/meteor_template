@@ -1,7 +1,8 @@
 accounts-base@2.2.9
 accounts-password@2.4.0
-alanning:roles@3.6.0
 aldeed:collection2@3.5.0
+aldeed:schema-deny@3.1.0
+aldeed:schema-index@3.1.0
 allow-deny@1.1.1
 autoupdate@1.8.0
 babel-compiler@7.10.5

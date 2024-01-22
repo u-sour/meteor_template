@@ -100,27 +100,32 @@ export default {
             newPassword: 'New Password',
           },
           email: 'Email',
-          roles: {
-            label: 'Roles',
-            help: 'Select user roles',
+          roleGroup: {
+            label: 'Role Group',
+            help: 'Select one role group',
           },
+          roles: 'Roles',
           status: 'Status', // EDT
           operation: 'Operation', // EDT
         },
       },
-      roles: {
-        title: 'Roles',
+      roleGroups: {
+        title: 'Role Groups',
         form: {
           _id: 'ID', // EDT
           name: 'Name',
-          children: 'Children',
+          roles: {
+            label: 'Roles',
+            help: 'Select roles',
+          },
+          status: 'Status',
           operation: 'Operation', // EDT
         },
       },
       settings: {
         title: 'Settings',
-        childRoles: {
-          title: 'Child Roles',
+        roles: {
+          title: 'Roles',
           form: {
             _id: 'ID', // EDT
             name: 'Name',

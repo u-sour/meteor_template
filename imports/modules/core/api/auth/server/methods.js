@@ -1,5 +1,5 @@
-import { Accounts } from 'meteor/accounts-base'
 import { Meteor } from 'meteor/meteor'
+import { Accounts } from 'meteor/accounts-base'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import rateLimit from '../../../utils/rate-limit'
@@ -8,11 +8,11 @@ import SimpleSchema from 'simpl-schema'
 // schema
 import { InsertSchema, UpdateSchema, UpdateProfileSchema } from '../schema'
 // security
-import { userIsInRole, userLoggedIn } from '../../../utils/security'
+import { userIsInAuthorization, userLoggedIn } from '../../../utils/security'
 // responses
 import { throwError, throwSuccess } from '../../../utils/responses'
 // message prefix
-const messagePrefix = 'core.messages.auth'
+export const messagePrefix = 'core.messages.auth'
 
 // Find
 export const findUsers = new ValidatedMethod({
@@ -30,9 +30,90 @@ export const findUsers = new ValidatedMethod({
       optional: true,
     },
   }).validator(),
-  run({ selector, options }) {
+  async run({ selector, options }) {
     if (Meteor.isServer) {
-      return Meteor.users.find(selector, options).fetch()
+      try {
+        selector = selector || {}
+        options = options || { $sort: { createdAt: 1 } }
+        // return Meteor.users.find(selector, options).fetch()
+        const data = await Meteor.users
+          .rawCollection()
+          .aggregate([
+            { $match: selector },
+            {
+              $lookup: {
+                from: 'core_roleGroups',
+                localField: 'profile.roleGroup',
+                foreignField: '_id',
+                as: 'profile.roleGroup',
+              },
+            },
+            {
+              $unwind: {
+                path: '$profile.roleGroup',
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
+              $group: {
+                _id: '$_id',
+                createdAt: { $last: '$createdAt' },
+                services: { $last: '$services' },
+                username: { $last: '$username' },
+                emails: { $last: '$emails' },
+                profile: { $last: '$profile' },
+              },
+            },
+            {
+              $unset: ['profile.roleGroup.roles'],
+            },
+            {
+              $unwind: {
+                path: '$profile.roles',
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
+              $lookup: {
+                from: 'core_roles',
+                localField: 'profile.roles',
+                foreignField: '_id',
+                as: 'profile.roles',
+              },
+            },
+            {
+              $unwind: {
+                path: '$profile.roles',
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
+              $group: {
+                _id: '$_id',
+                createdAt: { $last: '$createdAt' },
+                services: { $last: '$services' },
+                username: { $last: '$username' },
+                emails: { $last: '$emails' },
+                profile: { $last: '$profile' },
+                roles: { $push: '$profile.roles' },
+              },
+            },
+            {
+              $set: {
+                'profile.roles': '$roles',
+              },
+            },
+            {
+              $unset: ['roles'],
+            },
+            options,
+          ])
+          .toArray()
+
+        return throwSuccess.general({ status: 200, data })
+      } catch (error) {
+        throwError(error)
+      }
     }
   },
 })
@@ -75,13 +156,14 @@ export const insertUser = new ValidatedMethod({
             job: user.job,
             address: user.address,
             phoneNumber: user.phoneNumber,
+            roleGroup: user.roleGroup,
             roles: user.roles,
             status: user.status,
           },
         })
 
         // add roles
-        Roles.addUsersToRoles(userId, user.roles)
+        // Roles.addUsersToRoles(userId, user.roles)
 
         return throwSuccess.general({
           status: 201,
@@ -105,7 +187,12 @@ export const updateUser = new ValidatedMethod({
   run({ user }) {
     if (Meteor.isServer) {
       // check authorization
-      userIsInRole(['super', 'admin'])
+      // valid: current user roleGroup = [001 (super), 002 (admin)] & role = 03 (edit)
+      userIsInAuthorization({
+        roleGroups: ['001', '002'],
+        roles: ['03'],
+        isServer: true,
+      })
 
       try {
         // update user
@@ -122,13 +209,12 @@ export const updateUser = new ValidatedMethod({
               'profile.job': user.job,
               'profile.address': user.address,
               'profile.phoneNumber': user.phoneNumber,
+              'profile.roleGroup': user.roleGroup,
               'profile.roles': user.roles,
               'profile.status': user.status,
             },
           }
         )
-        // update roles
-        Roles.setUserRoles(user._id, user.roles)
 
         // update password
         if (user.password) {
@@ -210,7 +296,13 @@ export const removeUser = new ValidatedMethod({
     if (Meteor.isServer) {
       try {
         // check authorization
-        userIsInRole(['super'])
+        // valid: current user roleGroup = 001 (super) & role = 04 (remove)
+        userIsInAuthorization({
+          roleGroups: ['001'],
+          roles: ['04'],
+          isServer: true,
+        })
+
         // remove
         Meteor.users.remove({ _id })
         return throwSuccess.general({

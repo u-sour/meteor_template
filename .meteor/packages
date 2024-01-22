@@ -21,9 +21,10 @@ static-html@1.3.2                    # Define static page content in .html files
 
 jorgenvatle:vite-bundler
 accounts-password
-alanning:roles
 aldeed:collection2
 matb33:collection-hooks
 didericis:callpromise-mixin
 mdg:validated-method
 ddp-rate-limiter
+aldeed:schema-index
+aldeed:schema-deny

@@ -26,8 +26,8 @@
             <FormKit type="password" name="password" :label="$t(`${labelPrefix}.edit.newPassword`)" prefix-icon="password"
                 suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500" :validation="validations.password"
                 @suffix-icon-click="toggleShowPassword" v-if="value.changePassword" />
-            <FormKit type="checkbox" name="roles" :label="$t(`${labelPrefix}.roles.label`)" :options="roleOptions"
-                decorator-icon="check" :help="$t(`${labelPrefix}.roles.help`)" validation="required|min:1" />
+            <FormKit type="radio" name="roleGroup" :label="$t(`${labelPrefix}.roleGroup.label`)" :options="roleGroupOptions"
+                :help="$t(`${labelPrefix}.roleGroup.help`)" validation="required" />
             <FormKit type="select" name="status" :label="$t(`${labelPrefix}.status`)" :options="staticOptions.status"
                 validation="required" />
             <!--form-actions-->
@@ -58,12 +58,12 @@ const validations = {
     email: "required|email",
     password: "required|contains_uppercase|length:6"
 }
-const roleOptions = ref<Option[]>([])
+const roleGroupOptions = ref<Option[]>([])
 const submitted = ref(false)
 
 onMounted(async () => {
-    // set role options
-    roleOptions.value = await dynamicOptions.roles()
+    // set role group options
+    roleGroupOptions.value = await dynamicOptions.roleGroups()
 })
 
 // find one user
@@ -71,7 +71,7 @@ Meteor.call('core.admin.findOneUser', { _id: id }, (err: any, res: any) => {
     if (err) {
         return notify.error(err.message);
     }
-    const { _id, username, emails, profile: { firstName, lastName, about, company, job, address, phoneNumber, roles, status } } = res.data
+    const { _id, username, emails, profile: { firstName, lastName, about, company, job, address, phoneNumber, roleGroup, status } } = res.data
     initData.value = {
         _id,
         firstName,
@@ -84,7 +84,7 @@ Meteor.call('core.admin.findOneUser', { _id: id }, (err: any, res: any) => {
         phoneNumber,
         email: emails[0].address,
         changePassword: false,
-        roles,
+        roleGroup: roleGroup,
         status
     }
 })
@@ -96,6 +96,9 @@ const toggleShowPassword = (node: any) => {
 
 const submit = async (form: EditUserForm) => {
     submitted.value = true;
+    // find one roleGroup
+    const roleGroupDoc = await Meteor.callAsync('core.admin.findOneRoleGroup', { selector: { _id: form.roleGroup } })
+    form.roles = roleGroupDoc.data.roles
     // omit
     delete form["changePassword"];
     // call update user method
