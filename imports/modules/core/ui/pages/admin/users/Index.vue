@@ -16,6 +16,12 @@
                 <ImageNotFound :width="dimensions.width" :height="dimensions.height" v-else />
             </div>
         </template>
+        <template #item-roleGroup="{ roleGroup }">
+            <Status class="rounded-pill me-1" :text="roleGroup && roleGroup.name ? roleGroup.name : ''" />
+        </template>
+        <template #item-roles="{ roles }">
+            <Status class="rounded-pill me-1" v-for="role in roles" :key="role._id" :text="role.name" />
+        </template>
         <template #item-status="{ status }">
             <Status :text="status" :color="status === 'active' ? 'success' : 'danger'" />
         </template>
@@ -58,6 +64,8 @@ const headers = computed<Header[]>(() => [
     { text: t(`${labelPrefix}.username`), value: "username" },
     { text: t(`${labelPrefix}.email`), value: "email" },
     { text: t(`${labelPrefix}.phoneNumber`), value: "phoneNumber" },
+    { text: t(`${labelPrefix}.roleGroup.label`), value: "roleGroup" },
+    { text: t(`${labelPrefix}.roles`), value: "roles" },
     { text: t(`${labelPrefix}.status`), value: "status" },
     { text: t(`${labelPrefix}.operation`), value: "operation", width: 120 },
 ]);
@@ -66,13 +74,14 @@ const items = ref<Item[]>([]);
 const loading = ref(true);
 
 // load data from server
-Meteor.call('core.admin.findUsers', { selector: { _id: { $ne: Meteor.userId() } } }, (err: any, res: [User]) => {
+Meteor.call('core.admin.findUsers', { selector: { _id: { $ne: Meteor.userId() } } }, (err: any, res: any) => {
     if (err) {
         return notify.error(err.message);
     }
     // prepare data
-    for (let index = 0; index < res.length; index++) {
-        const user = res[index];
+    const users: [User] = res.data
+    for (let index = 0; index < users.length; index++) {
+        const user = users[index];
         items.value.push({
             profileImage: user.profile.profileImage,
             _id: user._id,
@@ -80,6 +89,8 @@ Meteor.call('core.admin.findUsers', { selector: { _id: { $ne: Meteor.userId() } 
             username: user.username,
             email: user.emails[0].address,
             phoneNumber: user.profile.phoneNumber,
+            roleGroup: user.profile.roleGroup,
+            roles: user.profile.roles,
             status: user.profile.status
         })
     }

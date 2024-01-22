@@ -7,6 +7,7 @@ export interface SignUpFrom {
     phoneNumber: string,
     confirmPassword: string,
     status: string,
+    roleGroups: string,
     roles: string[]
 }
 export interface SignInForm {
@@ -74,5 +75,7 @@ interface UserProfile {
     job?: string,
     address?: string,
     phoneNumber: string,
+    roleGroup: string,
+    roles: string[]
     status: string
 }

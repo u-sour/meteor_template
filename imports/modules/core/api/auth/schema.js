@@ -66,6 +66,9 @@ export const InsertSchema = new SimpleSchema({
     type: String,
     allowedValues: ['active', 'inactive'],
   },
+  roleGroup: {
+    type: String,
+  },
   roles: {
     type: Array,
   },
@@ -132,6 +135,9 @@ export const UpdateSchema = new SimpleSchema({
   status: {
     type: String,
     allowedValues: ['active', 'inactive'],
+  },
+  roleGroup: {
+    type: String,
   },
   roles: {
     type: Array,

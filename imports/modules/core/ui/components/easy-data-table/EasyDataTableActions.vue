@@ -29,16 +29,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Vue3Marquee } from 'vue3-marquee';
 import IconSvg from '../IconSvg.vue';
 import Icons from '../../../utils/icons';
+import { useRoute } from 'vue-router';
+import { userIsInAuthorization } from '../../../utils/security';
 
 defineProps({
     removeIcon: { type: String, default: Icons.remove },
     editIcon: { type: String, default: Icons.edit },
 })
 
+const route = useRoute();
+const pageMeta = computed(() => route.meta)
 const labelMessagePrefix = 'core.messages.transaction.confirm';
 
 // ref

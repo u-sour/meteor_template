@@ -38,7 +38,7 @@ defineProps({
     brand: { type: String, default: 'meteor template' }
 })
 
-const adminRoutes = routes[0].children[1].children.filter((r) => r.meta.isParent && r.name != "core.auth.admin.profile" && r.name != "core.auth.admin.settings.child-roles");
+const adminRoutes = routes[0].children[1].children.filter((r) => r.meta.isParent && r.name != "core.auth.admin.profile" && r.name != "core.auth.admin.settings.roles");
 </script>
 
 <style>

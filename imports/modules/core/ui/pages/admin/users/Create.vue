@@ -24,8 +24,8 @@
             <FormKit type="password" name="password" :label="$t('core.pages.auth.signUp.form.password')"
                 prefix-icon="password" suffix-icon="eyeClosed" suffix-icon-class="hover:text-blue-500"
                 :validation="validations.password" @suffix-icon-click="toggleShowPassword" />
-            <FormKit type="checkbox" name="roles" :label="$t(`${labelPrefix}.roles.label`)" :options="roleOptions"
-                decorator-icon="check" :help="$t(`${labelPrefix}.roles.help`)" validation="required|min:1" />
+            <FormKit type="radio" name="roleGroup" :label="$t(`${labelPrefix}.roleGroup.label`)" :options="roleGroupOptions"
+                :help="$t(`${labelPrefix}.roleGroup.help`)" validation="required" />
             <FormKit type="select" name="status" :label="$t(`${labelPrefix}.status`)" :options="staticOptions.status"
                 validation="required" />
             <!--form-actions-->
@@ -53,11 +53,11 @@ const validations = {
     email: "required|email",
     password: "required|contains_uppercase|length:6"
 }
-const roleOptions = ref<Option[]>([])
+const roleGroupOptions = ref<Option[]>([])
 const submitted = ref(false)
 
 onMounted(async () => {
-    roleOptions.value = await dynamicOptions.roles()
+    roleGroupOptions.value = await dynamicOptions.roleGroups()
 })
 
 const toggleShowPassword = (node: any) => {
@@ -67,6 +67,9 @@ const toggleShowPassword = (node: any) => {
 
 const submit = async (form: CreateUserForm) => {
     submitted.value = true;
+    // find one roleGroup
+    const roleGroupDoc = await Meteor.callAsync('core.admin.findOneRoleGroup', { selector: { _id: form.roleGroup } })
+    form.roles = roleGroupDoc.data.roles
     Meteor.call('core.admin.insertUser', { user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;

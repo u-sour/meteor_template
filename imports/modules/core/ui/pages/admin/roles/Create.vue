@@ -1,8 +1,15 @@
 <template>
     <div class="col">
-        <FormKit type="form" id="createUserForm" @submit="submit" #default="{ value }" :actions="false"
-            :disabled="submitted">
-            <FormKit name="_id" :label="$t(`${labelPrefix}.name`)" validation="required" />
+        <FormKit type="form" id="createRoleForm" @submit="submit" :actions="false" :disabled="submitted">
+            <div class="row">
+                <div class="col-6">
+                    <FormKit name="name" :label="$t(`${labelPrefix}.name`)" validation="required" autocomplete="off" />
+                </div>
+                <div class="col-6">
+                    <FormKit type="select" name="status" :label="$t(`${labelPrefix}.status`)"
+                        :options="staticOptions.status" validation="required" />
+                </div>
+            </div>
             <!--form-actions-->
             <FormActions :submitted="submitted" />
         </FormKit>
@@ -10,48 +17,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import FormActions from '../../../components/form/FormActions.vue';
-import { CreateUserForm } from '/imports/modules/core/types/user';
+import { CreateRoleForm } from '/imports/modules/core/types/role';
 import notify from '/imports/modules/core/utils/notify';
 import staticOptions from '../../../../utils/static-options';
-import dynamicOptions from '/imports/modules/core/utils/dynamic-options';
-import { Option } from '/imports/modules/core/types/option';
 import { reset } from '@formkit/vue';
 import { useI18n } from 'vue-i18n';
 import { Meteor } from 'meteor/meteor';
 
 const { t } = useI18n()
-const labelPrefix = 'core.pages.admin.roles.form';
-const validations = {
-    userInfo: "required|length:4",
-    email: "required|email",
-    password: "required|contains_uppercase|length:6"
-}
-const roleOptions = ref<Option[]>([])
+const labelPrefix = 'core.pages.admin.settings.roles.form';
 const submitted = ref(false)
 
-onMounted(async () => {
-    roleOptions.value = await dynamicOptions.roles()
-})
-
-const toggleShowPassword = (node: any, e: any) => {
-    node.props.suffixIcon = node.props.suffixIcon === 'eye' ? 'eyeClosed' : 'eye'
-    node.props.type = node.props.type === 'password' ? 'text' : 'password'
-}
-
-const submit = async (form: CreateUserForm) => {
+const submit = async (form: CreateRoleForm) => {
     submitted.value = true;
-    Meteor.call('core.admin.insertUser', { user: form }, (err: any, res: any) => {
+    form.createdAt = new Date();
+    form.createdBy = Meteor.userId()!;
+    Meteor.call('core.admin.insertRole', { doc: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;
-            return notify.error(err.message);
+            return notify.error(t(err.message));
         }
-        reset('createUserForm');
+        reset('createRoleForm');
         submitted.value = false;
         notify.success(t(res.message))
     })
-
 }
 </script>
 

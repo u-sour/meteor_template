@@ -9,6 +9,9 @@
         <template #empty-message>
             <EmptyData class="d-flex flex-column align-items-center" :message="`${labelMessagePrefix}.emptyData`" />
         </template>
+        <template #item-roles="{ roles }">
+            <Status v-for="role in roles" :key="role._id" class="rounded-pill me-1" :text="role.name" />
+        </template>
         <template #item-status="{ status }">
             <Status :text="status" :color="status === 'active' ? 'success' : 'danger'" />
         </template>
@@ -17,7 +20,6 @@
         </template>
     </EasyDataTable>
 </template>
-
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
@@ -33,15 +35,16 @@ import { Meteor } from "meteor/meteor";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const labelPrefix = 'core.pages.admin.settings.childRoles.form';
+const labelPrefix = 'core.pages.admin.roleGroups.form';
 const labelRowsPerPage = 'core.pageFilter.rowsPerPage';
 const labelMessagePrefix = 'core.messages.other';
 const router = useRouter();
-const searchField = ref(["name"]);
+const searchField = ref(["name", "roles", "status"]);
 const searchValue = ref();
 
 const headers = computed<Header[]>(() => [
     { text: t(`${labelPrefix}.name`), value: "name" },
+    { text: t(`${labelPrefix}.roles.label`), value: "roles" },
     { text: t(`${labelPrefix}.status`), value: "status" },
     { text: t(`${labelPrefix}.operation`), value: "operation", width: 120 },
 ]);
@@ -50,17 +53,18 @@ const items = ref<Item[]>([]);
 const loading = ref(true);
 
 // load data from server
-Meteor.call('core.admin.findChildRoles', {}, {}, (err: any, res: any) => {
+Meteor.call('core.admin.findRoleGroups', {}, (err: any, res: any) => {
     if (err) {
         return notify.error(err.message);
     }
     // prepare data
     for (let index = 0; index < res.data.length; index++) {
-        const role = res.data[index];
+        const roleGroup = res.data[index];
         items.value.push({
-            _id: role._id,
-            name: role.name,
-            status: role.status
+            _id: roleGroup._id,
+            name: roleGroup.name,
+            roles: roleGroup.roles,
+            status: roleGroup.status
         })
     }
     loading.value = false;
@@ -68,8 +72,8 @@ Meteor.call('core.admin.findChildRoles', {}, {}, (err: any, res: any) => {
 
 const removeItem = (val: Item) => {
     const { _id } = val;
-    // call remove childRole method
-    Meteor.call('core.admin.removeChildRole', { _id }, async (err: any, res: any) => {
+    // call remove role group method
+    Meteor.call('core.admin.removeRoleGroup', { _id }, async (err: any, res: any) => {
         if (err) {
             return notify.error(t(err.reason))
         }
@@ -78,7 +82,7 @@ const removeItem = (val: Item) => {
     })
 };
 
-const editItem = (val: Item) => router.push({ name: 'core.auth.admin.settings.child-roles.edit', params: { id: val._id } });
+const editItem = (val: Item) => router.push({ name: 'core.auth.admin.role-groups.edit', params: { id: val._id } });
 
 </script>
 

@@ -8,7 +8,8 @@ export interface CreateUserForm {
     address?: string,
     phoneNumber: string,
     email: string,
-    password: string
+    password: string,
+    roleGroup: string,
     roles: string[]
     status: string
 }
@@ -26,6 +27,7 @@ export interface EditUserForm {
     email: string,
     changePassword?: boolean,
     password?: string
+    roleGroup: string,
     roles: string[]
     status: string
 }

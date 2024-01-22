@@ -1,6 +1,0 @@
-[
-  { "name": "read", "status": "active" },
-  { "name": "create", "status": "active" },
-  { "name": "edit", "status": "active" },
-  { "name": "remove", "status": "active" }
-]
