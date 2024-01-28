@@ -35,79 +35,99 @@ export const findUsers = new ValidatedMethod({
       try {
         selector = selector || {}
         options = options || { $sort: { createdAt: 1 } }
-        // return Meteor.users.find(selector, options).fetch()
         const data = await Meteor.users
           .rawCollection()
-          .aggregate([
-            { $match: selector },
-            {
-              $lookup: {
-                from: 'core_roleGroups',
-                localField: 'profile.roleGroup',
-                foreignField: '_id',
-                as: 'profile.roleGroup',
+          .aggregate(
+            [
+              { $match: selector },
+              {
+                $lookup: {
+                  from: 'core_roleGroups',
+                  localField: 'profile.roleGroup',
+                  foreignField: '_id',
+                  as: 'profile.roleGroup',
+                },
               },
-            },
-            {
-              $unwind: {
-                path: '$profile.roleGroup',
-                preserveNullAndEmptyArrays: true,
+              {
+                $unwind: {
+                  path: '$profile.roleGroup',
+                  preserveNullAndEmptyArrays: true,
+                },
               },
-            },
-            {
-              $group: {
-                _id: '$_id',
-                createdAt: { $last: '$createdAt' },
-                services: { $last: '$services' },
-                username: { $last: '$username' },
-                emails: { $last: '$emails' },
-                profile: { $last: '$profile' },
+              {
+                $group: {
+                  _id: '$_id',
+                  createdAt: { $last: '$createdAt' },
+                  services: { $last: '$services' },
+                  username: { $last: '$username' },
+                  emails: { $last: '$emails' },
+                  profile: { $last: '$profile' },
+                },
               },
-            },
-            {
-              $unset: ['profile.roleGroup.roles'],
-            },
-            {
-              $unwind: {
-                path: '$profile.roles',
-                preserveNullAndEmptyArrays: true,
+              {
+                $unwind: {
+                  path: '$profile.routePermissions',
+                  preserveNullAndEmptyArrays: true,
+                },
               },
-            },
-            {
-              $lookup: {
-                from: 'core_roles',
-                localField: 'profile.roles',
-                foreignField: '_id',
-                as: 'profile.roles',
+              {
+                $unwind: {
+                  path: '$profile.routePermissions.roles',
+                  preserveNullAndEmptyArrays: true,
+                },
               },
-            },
-            {
-              $unwind: {
-                path: '$profile.roles',
-                preserveNullAndEmptyArrays: true,
+              {
+                $lookup: {
+                  from: 'core_roles',
+                  localField: 'profile.routePermissions.roles',
+                  foreignField: '_id',
+                  as: 'profile.routePermissions.roles',
+                },
               },
-            },
-            {
-              $group: {
-                _id: '$_id',
-                createdAt: { $last: '$createdAt' },
-                services: { $last: '$services' },
-                username: { $last: '$username' },
-                emails: { $last: '$emails' },
-                profile: { $last: '$profile' },
-                roles: { $push: '$profile.roles' },
+              {
+                $unwind: {
+                  path: '$profile.routePermissions.roles',
+                  preserveNullAndEmptyArrays: true,
+                },
               },
-            },
-            {
-              $set: {
-                'profile.roles': '$roles',
+              {
+                $group: {
+                  _id: {
+                    route: '$profile.routePermissions.route',
+                    userId: '$_id',
+                  },
+                  createdAt: { $last: '$createdAt' },
+                  services: { $last: '$services' },
+                  username: { $last: '$username' },
+                  emails: { $last: '$emails' },
+                  profile: { $last: '$profile' },
+                  route: { $last: '$profile.routePermissions.route' },
+                  roles: { $push: '$profile.routePermissions.roles' },
+                },
               },
-            },
-            {
-              $unset: ['roles'],
-            },
-            options,
-          ])
+              {
+                $group: {
+                  _id: '$_id.userId',
+                  createdAt: { $last: '$createdAt' },
+                  services: { $last: '$services' },
+                  username: { $last: '$username' },
+                  emails: { $last: '$emails' },
+                  profile: { $last: '$profile' },
+                  routePermissions: {
+                    $push: { route: '$route', roles: '$roles' },
+                  },
+                },
+              },
+              {
+                $set: { 'profile.routePermissions': '$routePermissions' },
+              },
+              {
+                $unset: ['routePermissions'],
+              },
+              options,
+            ],
+            { allowDiskUse: true }
+          )
           .toArray()
 
         return throwSuccess.general({ status: 200, data })
@@ -157,7 +177,7 @@ export const insertUser = new ValidatedMethod({
             address: user.address,
             phoneNumber: user.phoneNumber,
             roleGroup: user.roleGroup,
-            roles: user.roles,
+            routePermissions: user.routePermissions,
             status: user.status,
           },
         })
@@ -187,9 +207,9 @@ export const updateUser = new ValidatedMethod({
   run({ user }) {
     if (Meteor.isServer) {
       // check authorization
-      // valid: current user roleGroup = [001 (super), 002 (admin)] & role = 03 (edit)
+      // valid: current user rolePermissions.route = /core/auth/admin/users & role = 03 (edit)
       userIsInAuthorization({
-        roleGroups: ['001', '002'],
+        parentRoutePath: '/core/auth/admin/users',
         roles: ['03'],
         isServer: true,
       })
@@ -210,7 +230,7 @@ export const updateUser = new ValidatedMethod({
               'profile.address': user.address,
               'profile.phoneNumber': user.phoneNumber,
               'profile.roleGroup': user.roleGroup,
-              'profile.roles': user.roles,
+              'profile.routePermissions': user.routePermissions,
               'profile.status': user.status,
             },
           }
@@ -247,7 +267,6 @@ export const updateProfile = new ValidatedMethod({
       try {
         // check authentication
         userLoggedIn()
-
         // update
         Meteor.users.update(
           { _id: user._id },
@@ -296,9 +315,9 @@ export const removeUser = new ValidatedMethod({
     if (Meteor.isServer) {
       try {
         // check authorization
-        // valid: current user roleGroup = 001 (super) & role = 04 (remove)
+        // valid: current user rolePermissions.route = /core/auth/admin/users & role = 04 (remove)
         userIsInAuthorization({
-          roleGroups: ['001'],
+          parentRoutePath: '/core/auth/admin/users',
           roles: ['04'],
           isServer: true,
         })

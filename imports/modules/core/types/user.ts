@@ -10,7 +10,8 @@ export interface CreateUserForm {
     email: string,
     password: string,
     roleGroup: string,
-    roles: string[]
+    routePermissions: { route: string, roles: string[] }
+    // roles: string[]
     status: string
 }
 
@@ -28,6 +29,7 @@ export interface EditUserForm {
     changePassword?: boolean,
     password?: string
     roleGroup: string,
-    roles: string[]
+    routePermissions: { route: string, roles: string[] }
+    // roles: string[]
     status: string
 }

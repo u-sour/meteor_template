@@ -97,8 +97,8 @@ const toggleShowPassword = (node: any) => {
 const submit = async (form: EditUserForm) => {
     submitted.value = true;
     // find one roleGroup
-    const roleGroupDoc = await Meteor.callAsync('core.admin.findOneRoleGroup', { selector: { _id: form.roleGroup } })
-    form.roles = roleGroupDoc.data.roles
+    const roleGroup = await Meteor.callAsync('core.admin.findOneRoleGroup', { selector: { _id: form.roleGroup } })
+    form.routePermissions = roleGroup.data.routePermissions
     // omit
     delete form["changePassword"];
     // call update user method

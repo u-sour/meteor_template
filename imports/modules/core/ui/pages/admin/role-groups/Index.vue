@@ -9,8 +9,11 @@
         <template #empty-message>
             <EmptyData class="d-flex flex-column align-items-center" :message="`${labelMessagePrefix}.emptyData`" />
         </template>
-        <template #item-roles="{ roles }">
-            <Status v-for="role in roles" :key="role._id" class="rounded-pill me-1" :text="role.name" />
+        <template #item-routePermissions="{ routePermissions }">
+            <div v-for="rp in routePermissions" :key="rp.route">
+                <h6>{{ rp.route }}</h6>
+                <Status v-for="r in rp.roles " :key="r._id" class="rounded-pill me-1" :text="r.name" />
+            </div>
         </template>
         <template #item-status="{ status }">
             <Status :text="status" :color="status === 'active' ? 'success' : 'danger'" />
@@ -44,7 +47,7 @@ const searchValue = ref();
 
 const headers = computed<Header[]>(() => [
     { text: t(`${labelPrefix}.name`), value: "name" },
-    { text: t(`${labelPrefix}.roles.label`), value: "roles" },
+    { text: t(`${labelPrefix}.permissions`), value: "routePermissions" },
     { text: t(`${labelPrefix}.status`), value: "status" },
     { text: t(`${labelPrefix}.operation`), value: "operation", width: 120 },
 ]);
@@ -63,7 +66,7 @@ Meteor.call('core.admin.findRoleGroups', {}, (err: any, res: any) => {
         items.value.push({
             _id: roleGroup._id,
             name: roleGroup.name,
-            roles: roleGroup.roles,
+            routePermissions: roleGroup.routePermissions,
             status: roleGroup.status
         })
     }

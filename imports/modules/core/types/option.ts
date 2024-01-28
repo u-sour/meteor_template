@@ -1,4 +1,7 @@
 export interface Option {
     label: string
-    value: any
+    value: any,
+    attrs?: {
+        disabled: boolean
+    }
 }

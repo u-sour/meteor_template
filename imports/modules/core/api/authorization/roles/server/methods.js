@@ -3,7 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import RoleGroups from '../../groups/collection'
 import Roles from '../collection'
-import { cloneDeep, extend } from 'lodash'
+import { cloneDeep, extend, filter } from 'lodash'
 import rateLimit from '../../../../utils/rate-limit'
 import SimpleSchema from 'simpl-schema'
 
@@ -90,9 +90,9 @@ export const insertRole = new ValidatedMethod({
       Meteor._sleepForMs(300)
       try {
         // check authorization
-        // valid: current user roleGroup = 001 (super) & role = 02 (create)
+        // valid: current user parentRoutePath = '/core/auth/admin/settings/roles' & role = 02 (create)
         userIsInAuthorization({
-          roleGroups: ['001'],
+          parentRoutePath: '/core/auth/admin/settings/roles',
           roles: ['02'],
           isServer: true,
         })
@@ -124,28 +124,42 @@ export const updateRole = new ValidatedMethod({
         const { _id, status } = doc
 
         // check authorization
-        // valid: current user roleGroup = 001 (super) & role = 03 (edit)
+        // valid: current user rolePermissions.route = /core/auth/admin/settings/roles & role = 03 (edit)
         userIsInAuthorization({
-          roleGroups: ['001'],
+          parentRoutePath: '/core/auth/admin/settings/roles',
           roles: ['03'],
           isServer: true,
         })
 
         // check role status inactive
         if (status === 'inactive') {
-          // remove role in role groups collection
-          RoleGroups.find({ roles: _id }).forEach(function (rgDoc) {
-            return RoleGroups.update(rgDoc._id, {
-              $pull: { roles: _id },
+          // remove role by _id inside routePermissions (role group collection)
+          RoleGroups.find({
+            routePermissions: { $elemMatch: { roles: _id } },
+          }).forEach((rg) => {
+            const newRoutePermissions = rg.routePermissions.map((rp) => {
+              rp.roles = filter(rp.roles, (r) => r !== _id)
+              return rp
+            })
+            return RoleGroups.update(rg._id, {
+              $set: { routePermissions: newRoutePermissions },
             })
           })
 
-          // remove role in users collection
+          // remove role by _id inside 'profile.routePermissions' (users collection)
           Meteor.users
-            .find({ 'profile.roles': _id })
-            .forEach(function (userDoc) {
-              return Meteor.users.update(userDoc._id, {
-                $pull: { 'profile.roles': _id },
+            .find({
+              'profile.routePermissions': { $elemMatch: { roles: _id } },
+            })
+            .forEach((u) => {
+              const newRoutePermissions = u.profile.routePermissions.map(
+                (rp) => {
+                  rp.roles = filter(rp.roles, (r) => r !== _id)
+                  return rp
+                }
+              )
+              return Meteor.users.update(u._id, {
+                $set: { 'profile.routePermissions': newRoutePermissions },
               })
             })
         }
@@ -174,26 +188,40 @@ export const removeRole = new ValidatedMethod({
     if (Meteor.isServer) {
       try {
         // check authorization
-        // valid: current user roleGroup = 001 (super) & role = 04 (remove)
+        // valid: current user rolePermissions.route = /core/auth/admin/settings/roles & role = 04 (remove)
         userIsInAuthorization({
-          roleGroups: ['001'],
+          parentRoutePath: '/core/auth/admin/settings/roles',
           roles: ['04'],
           isServer: true,
         })
 
-        // remove role in role groups collection
-        RoleGroups.find({ roles: _id }).forEach(function (rgDoc) {
-          return RoleGroups.update(rgDoc._id, {
-            $pull: { roles: _id },
+        // remove role by _id inside routePermissions (role group collection)
+        RoleGroups.find({
+          routePermissions: { $elemMatch: { roles: _id } },
+        }).forEach((rg) => {
+          const newRoutePermissions = rg.routePermissions.map((rp) => {
+            rp.roles = filter(rp.roles, (r) => r !== _id)
+            return rp
+          })
+          return RoleGroups.update(rg._id, {
+            $set: { routePermissions: newRoutePermissions },
           })
         })
 
-        // remove role in users collection
-        Meteor.users.find({ 'profile.roles': _id }).forEach(function (userDoc) {
-          return Meteor.users.update(userDoc._id, {
-            $pull: { 'profile.roles': _id },
+        // remove role by _id inside 'profile.routePermissions' (users collection)
+        Meteor.users
+          .find({
+            'profile.routePermissions': { $elemMatch: { roles: _id } },
           })
-        })
+          .forEach((u) => {
+            const newRoutePermissions = u.profile.routePermissions.map((rp) => {
+              rp.roles = filter(rp.roles, (r) => r !== _id)
+              return rp
+            })
+            return Meteor.users.update(u._id, {
+              $set: { 'profile.routePermissions': newRoutePermissions },
+            })
+          })
 
         // remove
         Roles.remove({ _id })

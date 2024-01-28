@@ -4,10 +4,19 @@ export default new SimpleSchema({
   name: {
     type: String,
   },
-  roles: {
+  routePermissions: {
     type: Array,
   },
-  'roles.$': {
+  'routePermissions.$': {
+    type: Object,
+  },
+  'routePermissions.$.route': {
+    type: String,
+  },
+  'routePermissions.$.roles': {
+    type: Array,
+  },
+  'routePermissions.$.roles.$': {
     type: String,
   },
   status: {

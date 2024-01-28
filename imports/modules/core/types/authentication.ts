@@ -76,6 +76,7 @@ interface UserProfile {
     address?: string,
     phoneNumber: string,
     roleGroup: string,
-    roles: string[]
+    routePermissions: [{ route: string, roles: string[] }]
+    // roles: string[]
     status: string
 }

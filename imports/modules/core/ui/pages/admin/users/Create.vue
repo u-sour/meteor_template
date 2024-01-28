@@ -68,8 +68,8 @@ const toggleShowPassword = (node: any) => {
 const submit = async (form: CreateUserForm) => {
     submitted.value = true;
     // find one roleGroup
-    const roleGroupDoc = await Meteor.callAsync('core.admin.findOneRoleGroup', { selector: { _id: form.roleGroup } })
-    form.roles = roleGroupDoc.data.roles
+    const roleGroup = await Meteor.callAsync('core.admin.findOneRoleGroup', { selector: { _id: form.roleGroup } })
+    form.routePermissions = roleGroup.data.routePermissions
     Meteor.call('core.admin.insertUser', { user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;

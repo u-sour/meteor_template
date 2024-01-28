@@ -69,12 +69,27 @@ export const InsertSchema = new SimpleSchema({
   roleGroup: {
     type: String,
   },
-  roles: {
+  routePermissions: {
     type: Array,
   },
-  'roles.$': {
+  'routePermissions.$': {
+    type: Object,
+  },
+  'routePermissions.$.route': {
     type: String,
   },
+  'routePermissions.$.roles': {
+    type: Array,
+  },
+  'routePermissions.$.roles.$': {
+    type: String,
+  },
+  // roles: {
+  //   type: Array,
+  // },
+  // 'roles.$': {
+  //   type: String,
+  // },
   // profileImage: {
   //   type: ProfileImageSchema,
   //   optional: true,
@@ -139,12 +154,27 @@ export const UpdateSchema = new SimpleSchema({
   roleGroup: {
     type: String,
   },
-  roles: {
+  routePermissions: {
     type: Array,
   },
-  'roles.$': {
+  'routePermissions.$': {
+    type: Object,
+  },
+  'routePermissions.$.route': {
     type: String,
   },
+  'routePermissions.$.roles': {
+    type: Array,
+  },
+  'routePermissions.$.roles.$': {
+    type: String,
+  },
+  // roles: {
+  //   type: Array,
+  // },
+  // 'roles.$': {
+  //   type: String,
+  // },
   // profileImage: {
   //   type: ProfileImageSchema,
   //   optional: true,

@@ -104,7 +104,7 @@ export default {
             label: 'Role Group',
             help: 'Select one role group',
           },
-          roles: 'Roles',
+          permissions: 'Permissions', // EDT
           status: 'Status', // EDT
           operation: 'Operation', // EDT
         },
@@ -114,6 +114,7 @@ export default {
         form: {
           _id: 'ID', // EDT
           name: 'Name',
+          permissions: 'Permissions', // EDT
           roles: {
             label: 'Roles',
             help: 'Select roles',
@@ -134,6 +135,11 @@ export default {
           },
         },
       },
+    },
+    forbidden: {
+      title: '403',
+      subTitle: 'Permission Denied.',
+      content: "You don't have permission to access this page or resource.",
     },
     notFound: {
       title: '404',
