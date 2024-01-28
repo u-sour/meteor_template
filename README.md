@@ -9,11 +9,25 @@ This is a pre-designed and pre-built set of components, styles, and structures f
 3. Run `meteor`
 4. Open `http://localhost:3000` in your browser
 
-## Libraries used
+## Features
 
-- [Vue3](https://v3.vuejs.org/)
-- [Vite](https://vitejs.dev/)
-- [Vue Router](https://next.router.vuejs.org/)
-- [Meteor](https://www.meteor.com/)
-- [Vue Meteor Tracker](https://github.com/meteor-vue/vue-meteor-tracker)
-- [Tailwind CSS](https://tailwindcss.com/)
+- authentication and authorization
+- multi languages (EN,KM)
+- Light & Dark Mode
+- Responsive (Mobile, Tablet, Desktop)
+
+## Demo
+
+## Changelog
+
+###### v.1.0.0
+
+- init
+
+## Bug Fixes
+
+- none
+
+## Breaking Change
+
+- none
