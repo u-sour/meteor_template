@@ -2,21 +2,55 @@
   {
     "_id": "001",
     "name": "super",
-    "roles": ["01", "02", "03", "04"],
+    "routePermissions": [
+      {
+        "route": "/core/auth/admin/dashboard",
+        "roles": ["01", "02", "03", "04"]
+      },
+      {
+        "route": "/core/auth/admin/profile",
+        "roles": ["01", "02", "03", "04"]
+      },
+      {
+        "route": "/core/auth/admin/users",
+        "roles": ["01", "02", "03", "04"]
+      },
+      {
+        "route": "/core/auth/admin/role-groups",
+        "roles": ["01", "02", "03", "04"]
+      },
+      {
+        "route": "/core/auth/admin/settings",
+        "roles": ["01", "02", "03", "04"]
+      },
+      {
+        "route": "/core/auth/admin/settings/roles",
+        "roles": ["01", "02", "03", "04"]
+      }
+    ],
     "status": "active"
   },
   {
     "_id": "002",
     "name": "admin",
-    "roles": ["01", "02", "03", "04"],
+    "routePermissions": [
+      {
+        "route": "/core/auth/admin/dashboard",
+        "roles": ["01", "02", "03", "04"]
+      },
+      {
+        "route": "/core/auth/admin/profile",
+        "roles": ["01", "02", "03", "04"]
+      },
+      {
+        "route": "/core/auth/admin/users",
+        "roles": ["01", "02", "03"]
+      },
+      {
+        "route": "/core/auth/admin/settings",
+        "roles": ["01", "02", "03", "04"]
+      }
+    ],
     "status": "active"
-  },
-  {
-    "_id": "003",
-    "name": "cashier",
-    "roles": ["01", "02", "03"],
-    "status": "active"
-  },
-  { "_id": "004", "name": "reporter", "roles": ["01"], "status": "active" },
-  { "_id": "005", "name": "guest", "roles": ["01"], "status": "active" }
+  }
 ]

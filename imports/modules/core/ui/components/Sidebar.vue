@@ -28,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import { userIsInAuthorization } from '../../utils/security';
 import routes from '../routes';
 import SidebarLink from './SidebarLink.vue';
 import SidebarProfile from './SidebarProfile.vue';
@@ -38,7 +39,7 @@ defineProps({
     brand: { type: String, default: 'meteor template' }
 })
 
-const adminRoutes = routes[0].children[1].children.filter((r) => r.meta.isParent && r.name != "core.auth.admin.profile" && r.name != "core.auth.admin.settings.roles");
+const adminRoutes = routes[0].children[1].children.filter((r) => userIsInAuthorization({ parentRoutePath: r.meta.authorization.parentRoutePath, roles: r.meta.authorization.roles }) && r.meta.isParent && r.name != "core.auth.admin.profile" && r.name != "core.auth.admin.settings.roles");
 </script>
 
 <style>

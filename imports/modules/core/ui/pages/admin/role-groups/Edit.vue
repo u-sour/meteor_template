@@ -3,8 +3,33 @@
         <FormKit type="form" id="editRoleGroupForm" v-model="initData" @submit="submit" :actions="false"
             :disabled="submitted">
             <FormKit name="name" :label="$t(`${labelPrefix}.name`)" validation="required" autocomplete="off" />
-            <FormKit name="roles" type="checkbox" :label="$t(`${labelPrefix}.roles.label`)" :options="roleOptions"
-                decorator-icon="check" :help="$t(`${labelPrefix}.roles.help`)" validation="required" />
+            <!-- <FormKit name="roles" type="checkbox" :label="$t(`${labelPrefix}.roles.label`)" :options="roleOptions"
+                decorator-icon="check" :help="$t(`${labelPrefix}.roles.help`)" validation="required" /> -->
+            <div class="pb-2">
+                <FormKit type="list" :value="[{}]" name="routePermissions" dynamic #default="{ items, node, value }">
+                    <FormKit type="group" v-for="(item, index) in items" :key="item" :index="index">
+                        <div class="row">
+                            <FormKit type="select" label="Route" name="route" outer-class="col-12 col-lg-8"
+                                inner-class="p-custom-1" placeholder="select one"
+                                :options=dynamicOptions.routes(JSON.parse(JSON.stringify(value))) validation="required" />
+                            <div class="col-12 col-lg-4 position-relative">
+                                <FormKit name="roles" type="checkbox" :label="$t(`${labelPrefix}.roles.label`)"
+                                    :options="roleOptions" decorator-icon="check" :value="['01', '02', '03', '04']"
+                                    options-class="d-flex justify-content-between" :help="$t(`${labelPrefix}.roles.help`)"
+                                    validation="required">
+                                </FormKit>
+                                <button type="button" @click="() => node.input(value.filter((_, i) => i !== index))"
+                                    class="btn btn-danger position-absolute top-0 end-0 mt-3 mx-4">
+                                    -
+                                </button>
+                            </div>
+                        </div>
+                    </FormKit>
+                    <button type="button" @click="() => node.input(value.concat({}))" class="btn btn-dark">
+                        +
+                    </button>
+                </FormKit>
+            </div>
             <FormKit type="select" name="status" :label="$t(`${labelPrefix}.status`)" :options="staticOptions.status"
                 validation="required" />
             <!--form-actions-->

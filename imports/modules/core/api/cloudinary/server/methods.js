@@ -7,7 +7,7 @@ import SimpleSchema from 'simpl-schema'
 // config
 import cloudinary from '../../../startup/server/cloudinary.config'
 // security
-import { userIsInRole, userLoggedIn } from '../../../utils/security'
+import { userIsInAuthorization, userLoggedIn } from '../../../utils/security'
 // responses
 import { throwError, throwSuccess } from '../../../utils/responses'
 
@@ -91,8 +91,8 @@ Meteor.methods({
     folderPath,
   }) => {
     try {
-      // Check role
-      userIsInRole(['super', 'admin'])
+      // Check authorization
+      userLoggedIn()
 
       // delete resource by publicId
       await cloudinary.uploader.destroy(publicId)

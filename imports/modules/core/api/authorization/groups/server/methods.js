@@ -40,29 +40,44 @@ export const findRoleGroups = new ValidatedMethod({
           { $match: selector },
           {
             $unwind: {
-              path: '$roles',
+              path: '$routePermissions',
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $unwind: {
+              path: '$routePermissions.roles',
               preserveNullAndEmptyArrays: true,
             },
           },
           {
             $lookup: {
               from: 'core_roles',
-              localField: 'roles',
+              localField: 'routePermissions.roles',
               foreignField: '_id',
-              as: 'roleDoc',
+              as: 'routePermissions.roles',
             },
           },
           {
             $unwind: {
-              path: '$roleDoc',
+              path: '$routePermissions.roles',
               preserveNullAndEmptyArrays: true,
             },
           },
           {
             $group: {
-              _id: '$_id',
+              _id: { route: '$routePermissions.route', roleGroupId: '$_id' },
               name: { $last: '$name' },
-              roles: { $push: '$roleDoc' },
+              route: { $last: '$routePermissions.route' },
+              roles: { $push: '$routePermissions.roles' },
+              status: { $last: '$status' },
+            },
+          },
+          {
+            $group: {
+              _id: '$_id.roleGroupId',
+              name: { $last: '$name' },
+              routePermissions: { $push: { route: '$route', roles: '$roles' } },
               status: { $last: '$status' },
             },
           },
@@ -115,9 +130,9 @@ export const insertRoleGroup = new ValidatedMethod({
     if (Meteor.isServer) {
       try {
         // check authorization
-        // valid: current user roleGroup = 001 (super) & role = 02 (create)
+        // valid: current user parentRoutePath = '/core/auth/admin/role-groups' & role = 02 (create)
         userIsInAuthorization({
-          roleGroups: ['001'],
+          parentRoutePath: '/core/auth/admin/role-groups',
           roles: ['02'],
           isServer: true,
         })
@@ -146,26 +161,27 @@ export const updateRoleGroup = new ValidatedMethod({
   run({ doc }) {
     if (Meteor.isServer) {
       try {
-        let { _id, roles, status } = doc
+        let { _id, routePermissions, status } = doc
 
         // check authorization
-        // valid: current user roleGroup = 001 (super) & role = 03 (edit)
+        // valid: current user rolePermissions.route = /core/auth/admin/role-groups & role = 03 (edit)
         userIsInAuthorization({
-          roleGroups: ['001'],
+          parentRoutePath: '/core/auth/admin/role-groups',
           roles: ['03'],
           isServer: true,
         })
 
         //find users by role group _id
-        Meteor.users
-          .find({ 'profile.roleGroup': _id })
-          .forEach(function (userDoc) {
-            if (status === 'inactive') roles = []
-            // update users role group & role
-            return Meteor.users.update(userDoc._id, {
-              $set: { 'profile.roleGroup': _id, 'profile.roles': roles },
-            })
+        Meteor.users.find({ 'profile.roleGroup': _id }).forEach((u) => {
+          if (status === 'inactive') routePermissions = []
+          // update users role group & routePermissions
+          return Meteor.users.update(u._id, {
+            $set: {
+              'profile.roleGroup': _id,
+              'profile.routePermissions': routePermissions,
+            },
           })
+        })
 
         // update
         RoleGroups.update(doc._id, { $set: doc })
@@ -190,22 +206,20 @@ export const removeRoleGroup = new ValidatedMethod({
   run({ _id }) {
     if (Meteor.isServer) {
       // check authorization
-      // valid: current user roleGroup = 001 (super) & role = 04 (remove)
+      // valid: current user rolePermissions.route = /core/auth/admin/role-groups & role = 04 (remove)
       userIsInAuthorization({
-        roleGroups: ['001'],
+        parentRoutePath: '/core/auth/admin/role-groups',
         roles: ['04'],
         isServer: true,
       })
 
       //find users by role group _id
-      Meteor.users
-        .find({ 'profile.roleGroup': _id })
-        .forEach(function (userDoc) {
-          // update users role group & role
-          return Meteor.users.update(userDoc._id, {
-            $set: { 'profile.roleGroup': '', 'profile.roles': [] },
-          })
+      Meteor.users.find({ 'profile.roleGroup': _id }).forEach((u) => {
+        // update users role group & routePermissions
+        return Meteor.users.update(u._id, {
+          $set: { 'profile.roleGroup': '', 'profile.routePermissions': [] },
         })
+      })
 
       // remove
       RoleGroups.remove({ _id })

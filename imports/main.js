@@ -15,6 +15,7 @@ import 'vue3-toastify/dist/index.css'
 import 'vue3-easy-data-table/dist/style.css'
 import App from './App.vue'
 import { router } from './router'
+import { userIsInAuthorization } from './modules/core/utils/security'
 
 Meteor.startup(() => {
   const app = createApp(App)
@@ -46,8 +47,15 @@ Meteor.startup(() => {
       // (not allow user enter to route sing in or sing up page after login)
       // else if route user want to enter require guest & user already login login it will go to home page
       return next({ name: 'core.auth.admin.dashboard' })
-      // } else if (to.meta.roles && !userIsInRole(to.meta.roles)) {
-      //   return next({ name: 'core.auth.admin.dashboard' })
+    } else if (
+      to.meta.requiresAuth &&
+      !userIsInAuthorization({
+        parentRoutePath: to.meta.authorization.parentRoutePath,
+        roles: to.meta.authorization.roles,
+      })
+    ) {
+      // permission to access
+      return next({ name: 'core.forbidden' })
     } else {
       return next()
     }

@@ -7,13 +7,14 @@
 <script setup lang="ts">
 import { Meteor } from 'meteor/meteor';
 import { useRouter } from 'vue-router';
+import notify from '../../utils/notify';
 import IconSvg from './IconSvg.vue';
 import Icons from '../../utils/icons';
 
 const router = useRouter()
 const signOut = () => {
     Meteor.logout((error) => {
-        if (error) console.log(error);
+        if (error) notify.error(error.message);
         router.replace({ name: 'core.auth.signIn' });
     });
 }

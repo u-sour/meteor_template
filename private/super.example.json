@@ -8,7 +8,12 @@
       "lastName": "",
       "phoneNumber": "",
       "roleGroup": "",
-      "roles": [],
+      "routePermissions": [
+        {
+          "route": "",
+          "roles": ["", "", "", ""]
+        }
+      ],
       "status": ""
     }
   }

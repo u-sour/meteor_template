@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { isString, isArray, intersection } from 'lodash'
+import { intersection, find } from 'lodash'
 import { User } from '../types/authentication'
 const messagePrefix = 'core.messages.auth'
 
@@ -11,38 +11,26 @@ export const userLoggedIn = () => {
 }
 
 interface UserIsInAuthorization {
-  roleGroups: string[],
+  parentRoutePath: string,
   roles: string[],
   isServer?: boolean,
 }
 
 export const userIsInAuthorization = ({
-  roleGroups = [],
-  roles = [],
+  parentRoutePath,
+  roles,
   isServer = false
 }: UserIsInAuthorization) => {
-  console.log("🚀 ~ roles:", roles)
-  console.log("🚀 ~ roleGroups:", roleGroups)
   const currentUser = Meteor.user() as User
-  const currentUserRoleGroup =
-    currentUser && currentUser.profile && currentUser.profile.roleGroup
-  const currentUserRoles =
-    currentUser && currentUser.profile && currentUser.profile.roles || []
-
-  let isInRoleGroup = roleGroups.includes(currentUserRoleGroup)
-  console.log("🚀 ~ isInRoleGroup:", isInRoleGroup)
-  let isInRoles: string[] = []
-  if (isString(roles)) {
-    isInRoles.push(roles)
-  } else if (isArray(roles)) {
-    isInRoles = [...new Set([...isInRoles, ...roles])]
-  }
-  let result = intersection(currentUserRoles, isInRoles)
+  const currentUserRoutePermissions =
+    currentUser && currentUser.profile && currentUser.profile.routePermissions
+  const currentUserRoles = find(currentUserRoutePermissions, o => o.route == parentRoutePath)?.roles
+  let result = intersection(currentUserRoles, roles)
 
   if (isServer) {
-    if (isInRoleGroup && result.length) return true
+    if (result.length) return true
     throw new Meteor.Error(403, `${messagePrefix}.403`, 'Forbidden')
   }
-
-  return isInRoleGroup && result.length ? true : false
+  return result.length ? true : false
 }
+

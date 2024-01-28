@@ -54,6 +54,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.dashboard.title`,
               iconName: Icons.dashboard,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/dashboard',
+                roles: ['01'],
+              },
               isParent: true,
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.index`,
@@ -74,6 +78,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.profile.title`,
               iconName: Icons.profile,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/profile',
+                roles: ['01'],
+              },
               isParent: true,
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.index`,
@@ -94,11 +102,11 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.users.title`,
               iconName: Icons.users,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/users',
+                roles: ['01'],
+              },
               isParent: true,
-              authorization: [
-                { roleGroup: ['001'], roles: ['01', '02', '03', '04'] },
-                { roleGroup: ['002'], roles: ['02', '03'] },
-              ],
               create: {
                 route: 'core.auth.admin.users.create',
               },
@@ -120,6 +128,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.users.title`,
               iconName: Icons.users,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/users',
+                roles: ['02'],
+              },
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.create`,
                 parent: [
@@ -138,6 +150,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.users.title`,
               iconName: Icons.users,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/users',
+                roles: ['03'],
+              },
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.edit`,
                 parent: [
@@ -157,6 +173,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.roleGroups.title`,
               iconName: Icons.roleGroups,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/role-groups',
+                roles: ['01'],
+              },
               isParent: true,
               create: {
                 route: 'core.auth.admin.role-groups.create',
@@ -179,6 +199,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.roleGroups.title`,
               iconName: Icons.roleGroups,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/role-groups',
+                roles: ['02'],
+              },
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.create`,
                 parent: [
@@ -197,6 +221,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.roleGroups.title`,
               iconName: Icons.roleGroups,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/role-groups',
+                roles: ['03'],
+              },
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.edit`,
                 parent: [
@@ -216,6 +244,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.settings.title`,
               iconName: Icons.settings,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/settings',
+                roles: ['01'],
+              },
               isParent: true,
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.index`,
@@ -236,6 +268,11 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.settings.roles.title`,
               iconName: Icons.roles,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/settings/roles',
+                roles: ['01'],
+              },
+
               isParent: true,
               create: {
                 route: 'core.auth.admin.settings.roles.create',
@@ -253,6 +290,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.settings.roles.title`,
               iconName: Icons.roles,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/settings/roles',
+                roles: ['02'],
+              },
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.create`,
                 parent: roles,
@@ -266,6 +307,10 @@ const routes = [
             meta: {
               title: `${labelAdminPrefix}.settings.roles.title`,
               iconName: Icons.roles,
+              authorization: {
+                parentRoutePath: '/core/auth/admin/settings/roles',
+                roles: ['03'],
+              },
               breadcrumb: {
                 title: `${labelPageTypesPrefix}.edit`,
                 parent: roles,
@@ -273,6 +318,11 @@ const routes = [
             },
           },
         ],
+      },
+      {
+        path: '/core/forbidden',
+        name: 'core.forbidden',
+        component: () => import('./pages/Forbidden.vue'),
       },
       {
         path: '/core/:pathMatch(.*)*',

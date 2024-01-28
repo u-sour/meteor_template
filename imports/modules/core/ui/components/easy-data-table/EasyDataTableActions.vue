@@ -1,10 +1,12 @@
 <template>
     <div class="operation-wrapper">
         <template v-if="!showRemoveConfirmation">
-            <RouterLink to="" class="link-danger link-opacity-50-hover" @click="setShowRemoveConfirmation">
+            <RouterLink to="" class="link-danger link-opacity-50-hover" @click="setShowRemoveConfirmation"
+                v-if="userIsInAuthorization({ parentRoutePath: route.path, roles: ['04'] })">
                 <IconSvg class="operation-icon" :name="removeIcon" />
             </RouterLink>
-            <RouterLink to="" class="link-warning link-opacity-50-hover" @click="$emit('edit')">
+            <RouterLink to="" class="link-warning link-opacity-50-hover" @click="$emit('edit')"
+                v-if="userIsInAuthorization({ parentRoutePath: route.path, roles: ['03'] })">
                 <IconSvg class="operation-icon" :name="editIcon" />
             </RouterLink>
         </template>
@@ -29,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { Vue3Marquee } from 'vue3-marquee';
 import IconSvg from '../IconSvg.vue';
 import Icons from '../../../utils/icons';
@@ -42,7 +44,6 @@ defineProps({
 })
 
 const route = useRoute();
-const pageMeta = computed(() => route.meta)
 const labelMessagePrefix = 'core.messages.transaction.confirm';
 
 // ref

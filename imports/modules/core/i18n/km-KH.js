@@ -104,7 +104,7 @@ export default {
             label: 'ក្រុមតួនាទី',
             help: 'ជ្រើសរើសក្រុមតួនាទីមួយ',
           },
-          roles: 'តួនាទីតូចៗ',
+          permissions: 'ការអនុញ្ញាត', // EDT
           status: 'ស្ថានភាព', // EDT
           operation: 'ប្រតិបត្តិការ', // EDT
         },
@@ -114,6 +114,7 @@ export default {
         form: {
           _id: 'លេខសម្គាល់',
           name: 'ឈ្មោះ​',
+          permissions: 'ការអនុញ្ញាត', // EDT
           roles: {
             label: 'តួនាទីតូចៗ',
             help: 'ជ្រើសរើសតួនាទីតូចៗ',
@@ -134,6 +135,11 @@ export default {
           },
         },
       },
+    },
+    forbidden: {
+      title: '៤០៣',
+      subTitle: 'ការអនុញ្ញាតត្រូវបានបដិសេធ។',
+      content: 'អ្នកមិនមានសិទ្ធិចូលប្រើទំព័រ ឬធនធាននេះទេ។',
     },
     notFound: {
       title: '៤០៤',

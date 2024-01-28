@@ -19,8 +19,11 @@
         <template #item-roleGroup="{ roleGroup }">
             <Status class="rounded-pill me-1" :text="roleGroup && roleGroup.name ? roleGroup.name : ''" />
         </template>
-        <template #item-roles="{ roles }">
-            <Status class="rounded-pill me-1" v-for="role in roles" :key="role._id" :text="role.name" />
+        <template #item-routePermissions="{ routePermissions }">
+            <div v-for="rp in routePermissions" :key="rp.route">
+                <h6>{{ rp.route }}</h6>
+                <Status v-for="r in rp.roles " :key="r._id" class="rounded-pill me-1" :text="r.name" />
+            </div>
         </template>
         <template #item-status="{ status }">
             <Status :text="status" :color="status === 'active' ? 'success' : 'danger'" />
@@ -65,7 +68,7 @@ const headers = computed<Header[]>(() => [
     { text: t(`${labelPrefix}.email`), value: "email" },
     { text: t(`${labelPrefix}.phoneNumber`), value: "phoneNumber" },
     { text: t(`${labelPrefix}.roleGroup.label`), value: "roleGroup" },
-    { text: t(`${labelPrefix}.roles`), value: "roles" },
+    { text: t(`${labelPrefix}.permissions`), value: "routePermissions" },
     { text: t(`${labelPrefix}.status`), value: "status" },
     { text: t(`${labelPrefix}.operation`), value: "operation", width: 120 },
 ]);
@@ -90,7 +93,7 @@ Meteor.call('core.admin.findUsers', { selector: { _id: { $ne: Meteor.userId() } 
             email: user.emails[0].address,
             phoneNumber: user.profile.phoneNumber,
             roleGroup: user.profile.roleGroup,
-            roles: user.profile.roles,
+            routePermissions: user.profile.routePermissions,
             status: user.profile.status
         })
     }

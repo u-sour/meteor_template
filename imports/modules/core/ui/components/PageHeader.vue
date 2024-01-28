@@ -1,11 +1,10 @@
 <template>
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="mt-1 fw-bold">{{ $t(`${pageMeta.title}`) }}</h5>
-        <!-- <template v-for="auth in pageMeta.authorization" :key="auth.roleGroup"> -->
         <RouterLink :to="{ name: pageMeta.create.route }" class="btn btn-sm btn-outline-primary"
-            v-if="pageMeta.isParent && pageMeta.create" role="button">{{ $t(`${labelBtnPrefix}.create`) }}
+            v-if="pageMeta.isParent && pageMeta.create && userIsInAuthorization({ parentRoutePath: route.path, roles: ['01'] })"
+            role="button">{{ $t(`${labelBtnPrefix}.create`) }}
         </RouterLink>
-        <!-- </template> -->
     </div>
     <hr />
 </template>
