@@ -18,6 +18,10 @@ This is a pre-designed and pre-built set of components, styles, and structures f
 
 ## Demo
 
+
+https://github.com/u-sour/meteor_template/assets/145416126/24ae6e10-2fe1-4865-beb0-b71dadc90a31
+
+
 ## Changelog
 
 ###### v.1.0.0
