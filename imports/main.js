@@ -34,7 +34,7 @@ Meteor.startup(() => {
   /**
    * Navigation Router Guards
    **/
-  router.beforeEach((to, from, next) => {
+  router.beforeResolve((to, from, next) => {
     progress.start()
     if (to.meta.requiresAuth && !Meteor.userId()) {
       // (not allow user enter to route user page without login)
