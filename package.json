@@ -6,8 +6,9 @@
     "build": "meteor build ../output/vue --directory",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "test-production": "meteor run --production --settings .deploy/settings.json",
     "visualize": "meteor --production --extra-packages bundle-visualizer",
-    "galaxy-deploy": "DEPLOY_HOSTNAME=us-east-1.galaxy-deploy.meteor.com meteor deploy --settings settings.json meteor-template.meteorapp.com"
+    "meteor-cloud-deploy": "meteor deploy --settings .deploy/settings.json meteor-template.au.meteorapp.com --free --mongo"
   },
   "dependencies": {
     "@aacassandra/vue3-progressbar": "^1.0.3",
