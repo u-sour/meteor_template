@@ -1,5 +1,5 @@
 <template>
-    <img :src="flag.path" class="img border-2 rounded-circle" @click="toggleI18n" :alt="flag.locale">
+    <img :src="flag.path" class="img border border-2 rounded-circle" @click="toggleI18n" :alt="flag.locale">
 </template>
 
 <script setup lang="ts">
@@ -45,8 +45,8 @@ const toggleI18n = () => {
 
 <style scoped>
 .img {
-    height: 2rem;
-    width: 2rem;
+    height: 2.4rem;
+    width: 2.4rem;
     object-fit: cover;
     object-position: center;
     transition: transform 0.3s ease-in-out;
