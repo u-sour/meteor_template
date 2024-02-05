@@ -82,7 +82,6 @@ interface UserProfile {
     address?: string,
     phoneNumber: string,
     roleGroup: string,
-    routePermissions: [{ route: string, roles: string[] }]
-    // roles: string[]
+    routePermissions: RoutePermission[]
     status: string
 }
