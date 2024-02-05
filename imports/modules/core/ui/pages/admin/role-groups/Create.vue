@@ -8,8 +8,9 @@
                 <FormKit type="list" :value="[{}]" name="routePermissions" dynamic #default="{ items, node, value }">
                     <FormKit type="group" v-for="(item, index) in items" :key="item" :index="index">
                         <div class="row">
-                            <FormKit type="select" label="Route" name="route" outer-class="col-12 col-lg-8"
-                                inner-class="p-custom-1" placeholder="select one"
+                            <FormKit type="select" :label="$t(`${labelPrefix}.route.label`)" name="route"
+                                outer-class="col-12 col-lg-8" inner-class="p-custom-1"
+                                :placeholder="$t(`${labelPrefix}.route.placeholder`)"
                                 :options=dynamicOptions.routes(JSON.parse(JSON.stringify(value))) validation="required" />
                             <div class="col-12 col-lg-4 position-relative">
                                 <FormKit name="roles" type="checkbox" :label="$t(`${labelPrefix}.roles.label`)"

@@ -2,9 +2,9 @@
     <div class="col">
         <FormKit type="form" id="editProfileForm" v-model="initData" @submit="submit" #default="{ value }" :actions="false"
             :disabled="submitted">
-            <FormKit type="file" name="profileImageFile" :label="$t(`${labelPrefix}.form.profileImage`)"
+            <FormKit type="file" name="profileImageFile" :label="$t(`${labelPrefix}.form.profileImage.label`)"
                 accept=".jpg,.jpeg,.png" :file-item-icon="null" no-files-icon="fileImage"
-                help="Select one image that you like for your profile.">
+                :help="$t(`${labelPrefix}.form.profileImage.help`)">
                 <template #prefix>
                     <ImagePreview :imageFile="initData.profileImageFile" />
                 </template>
@@ -20,9 +20,10 @@
                 </div>
             </div>
             <FormKit name="username" :label="$t(`${labelPrefix}.form.username`)" :validation="validations.userInfo" />
-            <FormKit type="textarea" name="about" :label="$t(`${labelPrefix}.form.about`)"
-                placeholder="write something about yourself." :help="`${value.about ? value.about.length : 0} / 120`"
-                validation="length:0,120" validation-visibility="live" :validation-messages="{
+            <FormKit type="textarea" name="about" :label="$t(`${labelPrefix}.form.about.label`)"
+                :placeholder="$t(`${labelPrefix}.form.about.placeholder`)"
+                :help="`${value.about ? value.about.length : 0} / 120`" validation="length:0,120"
+                validation-visibility="live" :validation-messages="{
                     length: 'About cannot be more than 120 characters.',
                 }" />
             <FormKit name="company" :label="$t(`${labelPrefix}.form.company`)" />

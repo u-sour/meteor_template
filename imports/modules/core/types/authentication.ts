@@ -1,3 +1,8 @@
+interface RoutePermission {
+    route: string,
+    roles: string[]
+}
+
 export interface SignUpFrom {
     firstName: string,
     lastName: string,
@@ -7,9 +12,10 @@ export interface SignUpFrom {
     phoneNumber: string,
     confirmPassword: string,
     status: string,
-    roleGroups: string,
-    roles: string[]
+    roleGroup: string,
+    routePermissions: RoutePermission[]
 }
+
 export interface SignInForm {
     username: string,
     password: string,

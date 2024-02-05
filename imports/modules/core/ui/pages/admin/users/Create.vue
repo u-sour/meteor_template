@@ -11,9 +11,10 @@
                 </div>
             </div>
             <FormKit name="username" :label="$t(`${labelPrefix}.username`)" :validation="validations.userInfo" />
-            <FormKit type="textarea" name="about" :label="$t(`${labelPrefix}.about`)"
-                placeholder="write something about yourself." :help="`${value.about ? value.about.length : 0} / 120`"
-                validation="length:0,120" validation-visibility="live" :validation-messages="{
+            <FormKit type="textarea" name="about" :label="$t(`${labelPrefix}.about.label`)"
+                :placeholder="$t(`${labelPrefix}.about.placeholder`)"
+                :help="`${value.about ? value.about.length : 0} / 120`" validation="length:0,120"
+                validation-visibility="live" :validation-messages="{
                     length: 'About cannot be more than 120 characters.',
                 }" />
             <FormKit name="company" :label="$t(`${labelPrefix}.company`)" />

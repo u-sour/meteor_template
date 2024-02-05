@@ -57,11 +57,17 @@ export default {
         editProfile: {
           title: 'កែសម្រួលប្រវត្តិរូប',
           form: {
-            profileImage: 'រូបភាពប្រវត្តិរូប',
+            profileImage: {
+              label: 'រូបភាពប្រវត្តិរូប',
+              help: 'ជ្រើសរើសរូបភាពមួយដែលអ្នកចូលចិត្តសម្រាប់ប្រវត្តិរូបរបស់អ្នក។',
+            },
             firstName: 'នាមខ្លួន',
             lastName: 'នាមត្រកូល',
             username: 'ឈ្មោះ​អ្នកប្រើប្រាស់',
-            about: 'អំពី​ខ្ញុំ',
+            about: {
+              label: 'អំពី​ខ្ញុំ',
+              placeholder: 'សរសេរព័ត៌មានអំពីខ្លួនអ្នក។',
+            },
             company: 'ក្រុមហ៊ុន',
             job: 'ការងារ',
             country: 'ប្រទេស',
@@ -88,7 +94,10 @@ export default {
           lastName: 'នាមត្រកូល',
           fullName: 'ឈ្មោះ​ពេញ', // EDT
           username: 'ឈ្មោះ​អ្នកប្រើប្រាស់',
-          about: 'អំពី​ខ្ញុំ',
+          about: {
+            label: 'អំពី​ខ្ញុំ',
+            placeholder: 'សរសេរព័ត៌មានអំពីខ្លួនអ្នក។',
+          },
           company: 'ក្រុមហ៊ុន',
           job: 'ការងារ',
           country: 'ប្រទេស',
@@ -114,6 +123,10 @@ export default {
         form: {
           _id: 'លេខសម្គាល់',
           name: 'ឈ្មោះ​',
+          route: {
+            label: 'ផ្លូវ',
+            placeholder: 'ជ្រើសរើសផ្លូវមួយ។',
+          },
           permissions: 'ការអនុញ្ញាត', // EDT
           roles: {
             label: 'តួនាទីតូចៗ',

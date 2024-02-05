@@ -102,6 +102,7 @@ Meteor.call('core.admin.findUsers', { selector: { _id: { $ne: Meteor.userId() } 
 
 const removeItem = (val: Item) => {
     const { _id, username } = val;
+    loading.value = true;
     // call remove user method
     Meteor.call('core.admin.removeUser', { _id }, async (err: any, res: any) => {
         if (err) {
@@ -112,6 +113,7 @@ const removeItem = (val: Item) => {
             const publicId = val.profileImage.publicId
             await Meteor.callAsync('core.admin.upload.remove', { publicId, deleteEmptyFolder: true, folderPath: `${uploadFolderPrefix.profile}/${_id} - ${username}` });
         }
+        loading.value = false;
         items.value = items.value.filter((item) => item._id !== _id);
         notify.success(t(res.message))
     })
