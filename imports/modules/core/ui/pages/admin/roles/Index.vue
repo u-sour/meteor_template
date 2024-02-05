@@ -68,11 +68,13 @@ Meteor.call('core.admin.findRoles', {}, {}, (err: any, res: any) => {
 
 const removeItem = (val: Item) => {
     const { _id } = val;
+    loading.value = true;
     // call remove role method
     Meteor.call('core.admin.removeRole', { _id }, async (err: any, res: any) => {
         if (err) {
             return notify.error(t(err.reason))
         }
+        loading.value = false;
         items.value = items.value.filter((item) => item._id !== _id);
         notify.success(t(res.message))
     })

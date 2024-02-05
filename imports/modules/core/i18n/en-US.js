@@ -57,11 +57,17 @@ export default {
         editProfile: {
           title: 'Edit Profile',
           form: {
-            profileImage: 'Profile Image',
+            profileImage: {
+              label: 'Profile Image',
+              help: 'Select one image that you like for your profile.',
+            },
             firstName: 'First Name',
             lastName: 'Last Name',
             username: 'Username',
-            about: 'About',
+            about: {
+              label: 'About',
+              placeholder: 'Write information about yourself.',
+            },
             company: 'Company',
             job: 'Job',
             country: 'Country',
@@ -88,7 +94,10 @@ export default {
           lastName: 'Last Name',
           fullName: 'Full Name', // EDT
           username: 'Username',
-          about: 'About',
+          about: {
+            label: 'About',
+            placeholder: 'Write information about yourself.',
+          },
           company: 'Company',
           job: 'Job',
           country: 'Country',
@@ -115,6 +124,10 @@ export default {
           _id: 'ID', // EDT
           name: 'Name',
           permissions: 'Permissions', // EDT
+          route: {
+            label: 'Route',
+            placeholder: 'Select one route',
+          },
           roles: {
             label: 'Roles',
             help: 'Select roles',

@@ -58,11 +58,12 @@ const toggleShowPassword = (node: any) => {
     node.props.suffixIcon = node.props.suffixIcon === 'eye' ? 'eyeClosed' : 'eye'
     node.props.type = node.props.type === 'password' ? 'text' : 'password'
 }
-const signUp = (form: SignUpFrom) => {
-    form.status = 'inactive';
-    form.roleGroups = '005';
-    form.roles = ['01'];
+const signUp = async (form: SignUpFrom) => {
     submitted.value = true;
+    const roleGroup = await Meteor.callAsync('core.admin.findOneRoleGroup', { selector: { _id: '003' } })
+    form.status = 'inactive';
+    form.roleGroup = roleGroup.data._id;
+    form.routePermissions = roleGroup.data.routePermissions;
     Meteor.call('core.admin.insertUser', { user: form }, (err: any, res: any) => {
         if (err) {
             submitted.value = false;
